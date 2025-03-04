@@ -1,0 +1,151 @@
+.container {
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: white; /* Light gray background */
+  }
+  
+  .form {
+    background-color: white; /* White form background */
+    padding: 40px;
+    border-radius: 5px;
+    /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
+    text-align: center;
+  }
+  .form button { 
+    /* background-color: #007bff; */
+     /* Primary color (e.g., blue) */
+    color: #fff; /* White text */
+    border: none;
+    border-radius: 30px;
+    padding: 18px 25px;
+    cursor: pointer;
+    font-weight:400; 
+    font-size: 15px;
+    transition: background-color 0.3s ease; /* Add hover effect */
+  }
+
+  .login { 
+    background-color: rgb(91, 3, 91); /* Primary color (e.g., blue) */
+    color: #fff; /* White text */
+    border: none;
+    border-radius: 30px;
+    /* padding: 20px 20px; */
+    width:500px;
+    cursor: pointer;
+    font-weight:400; 
+    margin-top: 30px;
+    font-size: 15px;
+    transition: background-color 0.3s ease; /* Add hover effect */
+  }
+  .welcome {
+    font-size: 40px;
+    font-weight:400;
+  }
+  
+  .form button:hover {
+    background-color: #0062cc; /* Darker shade on hover */
+  }
+
+  .logo {
+ /* Adjust width as needed */
+    margin-bottom: 20px;
+    width: 210px;
+    height: 90px;
+  }
+  
+  .formGroup {
+    margin-bottom: 20px;
+    justify-items: start;
+  }
+  .forms{
+    margin-top: 80px;
+    margin-bottom: 20px;
+    justify-items: center
+  }
+  .formGroup label {
+    display: block;
+    margin-bottom: 5px;
+    font-size:17px;
+    font-weight:300;
+  }
+
+  .formGroup input {
+    width:500px;
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 8px;
+    height: 10px;
+    padding-left: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-size: 16px;
+    font-weight: 200;
+  }
+  
+  .orDivider {
+    margin: 50px 0;
+    border-top: 1px solid #ccc; /* Light gray divider */
+  }
+  
+  .orDivider span {
+    background-color: #fff; /* White background for "OR" text */
+    padding: 0 10px;
+    color: #333; /* Dark gray "OR" text color */
+  }
+  
+  .socialLogin button {
+    background-color: #fff; /* White button background */
+    color: #333; /* Dark gray button text */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 10px;
+    padding: 7px 25px;
+    margin-right: 30px;
+    margin-bottom: 30px;
+    
+  }
+  
+  .googleBtn {
+    background-color: #fff; /* White background for Google button */
+    color: #4285f4; /* Google blue color */
+    border-color: #4285f4; /* Google blue border */
+    border-radius: 3px;
+    font-size:small;
+    font-weight:100;
+  }
+  
+  .appleBtn {
+    background-color: #fff; /* White background for Apple button */
+    color: #000; /* Black Apple button text */
+    border-color: #000; /* Black Apple button border */
+    font-size:small;
+    font-weight:100;
+  }
+  
+  .createAccount {
+    color: #007bff; /* Blue "Create an account" link */
+    text-decoration: none;
+  }
+
+  .forgotPassword {
+    color: blue; /* Blue "Forgot password?" link */
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 200;
+    width: 170%;
+    margin-bottom: 20px;
+  }
+
+
+  .wrapper {
+    position:relative;
+  }
+  
+  .icon {
+    height: 1.5rem;
+    width: 2.5rem;
+    position: absolute;
+    box-sizing:border-box;
+    top:30%;
+    left:2px;
+  }
+  
