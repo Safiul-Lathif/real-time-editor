@@ -154,9 +154,18 @@ const Home = () => {
   };
   useEffect(() => {
     const fetchData = async () => {
+      if (id === "new") {
+        initializeEditor({
+          time: Date.now(),
+          blocks: [],
+          version: "1",
+        });
+        setIsEdit(false);
+        return;
+      }
       try {
         const response = await fetch(
-          `http://localhost/Researchpickpoc/api/viewContent?id=${id}`
+          `http://pocapi.researchpick.com/api/viewContent?id=${id}`
         );
         const result = await response.json();
         previousData.blocks = result.blocks;
@@ -189,7 +198,9 @@ const Home = () => {
         version: savedData.version,
       };
       try {
-        Handler({ newPost: map, isEdit: isEdit, id: id });
+        const firstBlock = map.blocks[0];
+        const title = firstBlock.data.text ? firstBlock.data.text : "";
+        Handler({ newPost: map, isEdit: isEdit, id: id, title: title });
       } catch (error) {
         console.error("error  data:", error);
       }
@@ -214,7 +225,7 @@ const Home = () => {
   const download = async () => {
     try {
       const response = await fetch(
-        `http://localhost/Researchpickpoc/api/downloadword?id=${id}`
+        `http://pocapi.researchpick.com/api/downloadword?id=${id}`
       );
       if (response.ok) {
         const result = await response.text();
@@ -222,9 +233,12 @@ const Home = () => {
           "File downloaded successfully. Please check the download folder."
         );
         window.open(result, "_blank", "noopener,noreferrer");
+      } else {
+        alert("Error downloading file.");
       }
     } catch (error) {
       console.error("Error fetching data:", error);
+      alert("Error downloading file.");
     }
   };
 
@@ -282,16 +296,13 @@ const Home = () => {
 
   return (
     <div className={styles.container}>
-      <h1>
-        Project {id} - {name}'s Editor Page
-      </h1>
       <div id="editor" className={styles.editor}></div>
       <button onClick={save} className={styles.saveButton}>
         {isEdit ? "Edit" : "Save"}
       </button>
-      <button onClick={saveWithChanges} className={styles.saveButton}>
+      {/* <button onClick={saveWithChanges} className={styles.saveButton}>
         {isEdit ? "Edit with changes" : "Save"}
-      </button>
+      </button> */}
       <button
         onClick={download}
         disabled={isSaving}

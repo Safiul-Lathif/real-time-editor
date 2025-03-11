@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-// import Link from "next/link";
-// import { useRouter } from 'next/router';
 import styles from "../login/login.module.css"; // Import CSS module
 import googleLogo from "../../assets/google.png";
 import appleLogo from "../../assets/apple-logo.png";
@@ -8,42 +6,39 @@ import appLogo from "../../assets/app_logo.png";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import { LockOpenOutlined } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-// import {
-//   EmailOutline,
-//   Lock,
-//   LockAlert,
-//   LockOpenOutline,
-//   LockOutline,
-// } from "mdi-material-ui";
 
 const Login = () => {
-  //   const [email, setEmail] = useState('');
-  //   const [password, setPassword] = useState('');
-  //   const router = useRouter();
-
-  const handleSubmit = async (event) => {
+  const handleLogin = (event) => {
     event.preventDefault();
-
-    // Handle login logic here (e.g., send data to server)
-    try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        // body: JSON.stringify({ email, password }),
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    console.log(`Email: ${email}, Password: ${password}`);
+    fetch("http://pocapi.researchpick.com/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle successful login response
+        console.log("Login successful:", data);
+        if (data.status === false) {
+          alert(data.message);
+        } else if (data.token) {
+          localStorage.setItem("token", data.token);
+          alert("Login successful");
+          window.location.href = "/";
+        }
+      })
+      .catch((error) => {
+        // Handle login error
+        console.error("Login error:", error);
       });
-
-      if (response.ok) {
-        // Successful login
-        const data = await response.json();
-        // Store user data (e.g., in local storage or using a library like NextAuth.js)
-        // router.push('/dashboard'); // Redirect to dashboard
-      } else {
-        // Handle login errors (e.g., display error messages)
-        console.error("Login failed.");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-    }
   };
 
   return (
@@ -60,8 +55,7 @@ const Login = () => {
               <input
                 type="email"
                 id="email"
-                // value={email}
-                // onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email id"
                 required
               />
             </div>
@@ -73,16 +67,15 @@ const Login = () => {
               <input
                 type="password"
                 id="password"
-                // value={password}
-                // onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
                 required
               />
             </div>
           </div>
           <div className={styles.forgotPassword}>
-            <Link to="/register">Forget Password?</Link>
+            <Link to="/forgetPassword">Forget Password?</Link>
           </div>
-          <button className={styles.login} type="submit">
+          <button className={styles.login} type="submit" onClick={handleLogin}>
             Login
           </button>
         </form>
@@ -104,7 +97,7 @@ const Login = () => {
           </button>
         </div>
         <p>New to Research Pick?</p>
-        <Link className={styles.createAccount} to="/register">
+        <Link className={styles.createAccount} to="/getStartNow">
           Create an account
         </Link>
       </div>

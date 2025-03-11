@@ -5,20 +5,10 @@ import googleLogo from "../../assets/google.png";
 import appleLogo from "../../assets/apple-logo.png";
 import appLogo from "../../assets/app_logo.png";
 import { EmailOutlined } from "@mui/icons-material";
-// import {
-//   EmailOutline,
-//   Lock,
-//   LockAlert,
-//   LockOpenOutline,
-//   LockOutline,
-// } from "mdi-material-ui";
+
 import { Link } from "react-router-dom";
 
 const GetStartNow = () => {
-  //   const [email, setEmail] = useState('');
-  //   const [password, setPassword] = useState('');
-  //   const router = useRouter();
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -57,10 +47,47 @@ const GetStartNow = () => {
               <div className={styles.icon}>
                 <EmailOutlined />
               </div>
-              <input type="email" id="email" required />
+              <input
+                type="email"
+                id="email"
+                placeholder="Enter your email id"
+                required
+              />
             </div>
           </div>
-          <button className={styles.login} type="submit">
+          <button
+            className={styles.login}
+            type="submit"
+            onClick={async (event) => {
+              event.preventDefault();
+              const email = document.getElementById("email").value;
+              localStorage.setItem("email", email);
+              try {
+                const response = await fetch(
+                  "http://pocapi.researchpick.com/api/getEmailId",
+                  {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ emailid: email }),
+                  }
+                );
+
+                if (response.ok) {
+                  const data = await response.json();
+                  if (data.status === true) {
+                    window.location.href = "/checkEmail";
+                    alert("OTP has been sent to your Email");
+                  } else {
+                    alert(data.message);
+                  }
+                } else {
+                  console.error("Login failed.");
+                }
+              } catch (error) {
+                console.error("Login error:", error);
+              }
+            }}
+          >
             Continue
           </button>
         </form>
@@ -82,7 +109,7 @@ const GetStartNow = () => {
           </button>
         </div>
         <p>Already using research pick?</p>
-        <Link to="/register" className={styles.createAccount}>
+        <Link to="/login" className={styles.createAccount}>
           Sign in to an existing workspace
         </Link>
       </div>
