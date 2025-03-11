@@ -2,7 +2,6 @@ import "./App.css";
 import Home from "./pages/index.jsx";
 import { BrowserRouter, Router, Routes, Route, Link } from "react-router-dom";
 import EditorWithHighlightedChanges from "./pages/trackChanges.jsx";
-import { HomePage } from "./pages/home.jsx";
 import Login from "./pages/login/login.jsx";
 import SignUp from "./pages/signUp/SignUp.jsx";
 import GetStartNow from "./pages/getStartNow/GetStartNow.jsx";
@@ -14,14 +13,26 @@ import ProfileScreen from "./pages/profile/profile.jsx";
 import CheckEmail from "./pages/checkEmail/CheckEmail.jsx";
 import NewPassword from "./pages/newPassoword/NewPassword.jsx";
 import Success from "./pages/Succes.jsx";
+import Credits from "./pages/credits/Credits.jsx";
+import ResearchPickPricing from "./pages/researchPickPricings/ResearchPickPrices.jsx";
 
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
         <Routes>
-          <Route path="/" element={<ResearchPick />} />
+          <Route
+            path="/"
+            element={
+              localStorage.getItem("token") ? <ResearchPick /> : <Login />
+            }
+          />
+          <Route path="/credits" element={<Credits />} />
           <Route path="/editProfile" element={<EditProfileScreen />} />
+          <Route
+            path="/researchPickPricing"
+            element={<ResearchPickPricing />}
+          />
           <Route path="/success" element={<Success />} />
           <Route path="/newPassword" element={<NewPassword />} />
           <Route path="/checkEmail" element={<CheckEmail />} />

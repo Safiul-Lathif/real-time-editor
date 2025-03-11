@@ -1,20 +1,15 @@
-"use client";
 import React, { useState } from "react";
-import appLogo from "../../assets/app_logo.png";
 import "./ResearchPick.css"; // Import your CSS file
-
-import SettingsIcon from "@mui/icons-material/Settings";
-import SearchIcon from "@mui/icons-material/Search";
 import {
-  ContactMail,
+  Add,
   Delete,
   Downloading,
   FileDownload,
   FileDownloadOff,
-  NotificationAdd,
-  PlusOne,
   Search,
 } from "@mui/icons-material";
+import SideBar from "../../components/sideBar/SideBar";
+import { TopBar } from "../../components/topBar/TopBar";
 const projectsData = [
   // Sample project data (replace with your actual data)
   {
@@ -104,74 +99,15 @@ const ResearchPick = () => {
   );
 
   return (
-    <div className="container">
-      <aside className="sidebar">
-        <img
-          src={appLogo}
-          alt="Research Pick Logo"
-          style={{
-            width: 240,
-            height: 100,
-            margin: "0 auto",
-            marginBottom: "20px",
-          }}
-        />{" "}
-        <nav className="navigation">
-          <div className="nav-item active">
-            <ContactMail />
-            Projects
-          </div>
-          <div className="nav-item">
-            <ContactMail />
-            Credits
-          </div>
-          <div className="nav-item">
-            <ContactMail />
-            Contacts
-          </div>
-          <div className="nav-item">
-            <SettingsIcon />
-            Settings
-          </div>
-          <div className="nav-item">
-            <ContactMail />
-            Journal List
-          </div>
-        </nav>
-      </aside>
+    <div
+      style={{
+        display: "flex",
+        height: "100%",
+      }}
+    >
+      <SideBar />
       <div className="content">
-        <header className="header">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              gap: "10px",
-            }}
-          >
-            <img
-              src="https://media.licdn.com/dms/image/v2/C4D03AQFdX9FHzdCSYg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1646324063549?e=1744243200&v=beta&t=0fWXGZOdxmZ8Xh255N5WSQB6jrfjGpS4i0dpX2sn2lE"
-              alt="User Avatar"
-              className="avatar"
-            />
-            <span className="user-name">Safiul Lathif</span>
-          </div>
-          <div
-            style={{
-              height: "45px",
-              width: "45px",
-              borderRadius: "50%",
-              backgroundColor: "white",
-              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.5)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <NotificationAdd />
-          </div>
-        </header>
-
+        <TopBar />
         <div className="project-area">
           <div
             style={{
@@ -236,9 +172,26 @@ const ResearchPick = () => {
               <button className="upgrade-button">Upgrade</button>
             </div>
           </div>
-          <ul className="project-list">
+          <ul
+            style={{
+              marginTop: "20px",
+              width: "98%",
+              borderRadius: "20px",
+              backgroundColor: "white",
+              padding: "15px",
+            }}
+          >
             <div className="table-top-bar">
-              <div className="search-box-container">
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  border: "1px solid #ccc",
+                  borderRadius: "20px",
+                  padding: "3px 10px",
+                }}
+              >
                 <Search
                   style={{
                     color: "gray",
@@ -252,8 +205,11 @@ const ResearchPick = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <button className="outlined-button">
-                <PlusOne style={{ marginRight: "5px" }} />
+              <button
+                className="outlined-button"
+                onClick={() => (window.location.href = "/project/new")}
+              >
+                <Add style={{ marginRight: "5px" }} />
                 New project
               </button>
             </div>
@@ -278,7 +234,18 @@ const ResearchPick = () => {
               <div className="project-list-header-item action">Actions</div>
             </li>
             {filteredProjects.map((project, index) => (
-              <li key={index} className="project-list-item">
+              <li
+                key={index}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  borderRadius: "10px",
+                  padding: "15px 10px",
+                  cursor: "pointer",
+                  backgroundColor: project.checkbox ? "#e0e0e0" : "white",
+                }}
+              >
                 <input
                   className="checkbox"
                   type="checkbox"
@@ -292,7 +259,12 @@ const ResearchPick = () => {
                     );
                   }}
                 />
-                <div className="project-list-item-text subtitle">
+                <div
+                  onClick={() =>
+                    (window.location.href = `/project/${project.id}`)
+                  }
+                  className="project-list-item-text subtitle"
+                >
                   {project.title}
                 </div>
                 <div className="project-list-item-text">---</div>
@@ -303,7 +275,22 @@ const ResearchPick = () => {
                 <div className="project-list-item-text action">
                   <FileDownload />
                   <FileDownloadOff />
-                  <Downloading />
+                  <Downloading
+                    onClick={async () => {
+                      const response = await fetch(
+                        `http://pocapi.researchpick.com/api/downloadword?id=${project.id}`
+                      );
+                      if (response.ok) {
+                        const result = await response.text();
+                        alert(
+                          "File downloaded successfully. Please check the download folder."
+                        );
+                        window.open(result, "_blank", "noopener,noreferrer");
+                      } else {
+                        alert("Error downloading file.");
+                      }
+                    }}
+                  />
                   <Delete />
                 </div>
               </li>

@@ -62,7 +62,42 @@ const ForgetPassword = () => {
             </div>
           </div>
           {error && <p className={styles.error}>{error}</p>}
-          <button className={styles.login} type="submit">
+          <button
+            className={styles.login}
+            onClick={async (event) => {
+              event.preventDefault();
+              const email = document.getElementById("email").value;
+              const body = JSON.stringify({
+                emailid: email,
+              });
+              console.log(body);
+              try {
+                const response = await fetch(
+                  `http://pocapi.researchpick.com/api/TriggerOTP`,
+                  {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: body,
+                  }
+                );
+                if (response.ok) {
+                  // Successful login
+                  const data = await response.json();
+                  console.log(data);
+                  if (data.status === true) {
+                    window.location.href = "/register";
+                  } else {
+                    alert(data.message);
+                  }
+                } else {
+                  setError("Login failed.");
+                }
+              } catch (error) {
+                setError("Login error:");
+              }
+            }}
+            type="submit"
+          >
             Reset Password
           </button>
         </form>

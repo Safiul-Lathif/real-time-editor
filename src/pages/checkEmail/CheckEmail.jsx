@@ -16,7 +16,7 @@ import PinField from "react-pin-field";
 
 const CheckEmail = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [OTP, setOTP] = useState("");
   const [error, setError] = useState(null);
 
   const handleSubmit = async (event) => {
@@ -40,6 +40,7 @@ const CheckEmail = () => {
       setError("Login error:");
     }
   };
+  const storedEmail = localStorage.getItem("email");
 
   return (
     <div className={styles.container}>
@@ -47,13 +48,14 @@ const CheckEmail = () => {
         <img src={appLogo} alt="Research Pick Logo" className={styles.logo} />
         <h1 className={styles.welcome}>Check your email for a code </h1>
         <p>
-          We've send a 6-character code to safiullathif65@gmail.com. The code
-          expires shortly, so please enter it soon. 6-digit confirmation code
+          We've send a 6-character code to {storedEmail}. The code expires
+          shortly, so please enter it soon. 6-digit confirmation code
         </p>
         <form className={styles.forms} onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <div className={styles.formGroupRow}>
               <PinField
+                className="otp"
                 length={6} // Set the desired PIN length
                 type="text" // or "password" for masking
                 inputMode="numeric" // Use numeric keyboard on mobile
@@ -68,11 +70,50 @@ const CheckEmail = () => {
                   fontSize: "16px",
                   width: "10px",
                 }}
+                onChange={(value) => {
+                  setOTP(value);
+                }}
               />
             </div>
           </div>
           {error && <p className={styles.error}>{error}</p>}
-          <button className={styles.login} type="submit">
+          <button
+            className={styles.login}
+            type="submit"
+            onClick={async (event) => {
+              event.preventDefault();
+              const body = JSON.stringify({
+                emailid: storedEmail,
+                verify_code: OTP,
+              });
+              console.log(body);
+              try {
+                const response = await fetch(
+                  `http://pocapi.researchpick.com/api/verifycode`,
+                  {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: body,
+                  }
+                );
+                if (response.ok) {
+                  // Successful login
+                  const data = await response.json();
+                  console.log(data);
+                  if (data.status === true) {
+                    localStorage.setItem("userId", data.id);
+                    window.location.href = "/register";
+                  } else {
+                    alert(data.message);
+                  }
+                } else {
+                  setError("Login failed.");
+                }
+              } catch (error) {
+                setError("Login error:");
+              }
+            }}
+          >
             Verify
           </button>
           <p
