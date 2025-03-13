@@ -16,8 +16,21 @@ const Header = () => (
       }}
     />
     <RightContent>
-      <ProjectDropdown>Project</ProjectDropdown>
-      <LogoutButton>Logout</LogoutButton>
+      <ProjectDropdown
+        onClick={() => {
+          window.location.href = "/";
+        }}
+      >
+        Project
+      </ProjectDropdown>
+      <LogoutButton
+        onClick={() => {
+          localStorage.removeItem("token");
+          window.location.href = "/";
+        }}
+      >
+        Logout
+      </LogoutButton>
     </RightContent>
   </HeaderContainer>
 );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ResearchPick.css"; // Import your CSS file
 import {
   Add,
@@ -10,6 +10,7 @@ import {
 } from "@mui/icons-material";
 import SideBar from "../../components/sideBar/SideBar";
 import { TopBar } from "../../components/topBar/TopBar";
+import axios from "axios";
 const projectsData = [
   // Sample project data (replace with your actual data)
   {
@@ -88,7 +89,7 @@ const projectsData = [
 
 const ResearchPick = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterBy, setFilterBy] = useState("all");
+  const [filterBy, setFilterBy] = useState("all_projects");
   const [projects, setProjects] = useState(projectsData); // Initialize projects with data
 
   let filteredProjects = projects.filter((project) =>
@@ -97,6 +98,45 @@ const ResearchPick = () => {
   filteredProjects = filteredProjects.filter(
     (project) => project.filterType === filterBy || filterBy === "all"
   );
+
+  const fetchProjects = async (listType) => {
+    let token = localStorage.getItem("token");
+    try {
+      fetch("http://pocapi.researchpick.com/api/projectlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          listtype: listType,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setProjects(
+            data.data.map((project) => {
+              return {
+                id: 1,
+                title: project.title,
+                authors: project.authors ?? "",
+                owner: project.owner_email,
+                lastModified: project.last_edited_on,
+                filterType: listType,
+                checkbox: false,
+              };
+            })
+          );
+        });
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjects(filterBy);
+  }, [filterBy]);
 
   return (
     <div
@@ -120,25 +160,25 @@ const ResearchPick = () => {
             <div className="project-filters">
               <button
                 className={`filter-button ${
-                  filterBy === "all" ? "active" : ""
+                  filterBy === "all_projects" ? "active" : ""
                 }`}
-                onClick={() => setFilterBy("all")}
+                onClick={() => setFilterBy("all_projects")}
               >
                 All Projects
               </button>
               <button
                 className={`filter-button ${
-                  filterBy === "your" ? "active" : ""
+                  filterBy === "owner" ? "active" : ""
                 }`}
-                onClick={() => setFilterBy("your")}
+                onClick={() => setFilterBy("owner")}
               >
                 Your Projects
               </button>
               <button
                 className={`filter-button ${
-                  filterBy === "collaborations" ? "active" : ""
+                  filterBy === "collaborator" ? "active" : ""
                 }`}
-                onClick={() => setFilterBy("collaborations")}
+                onClick={() => setFilterBy("collaborator")}
               >
                 Your Collaborations
               </button>

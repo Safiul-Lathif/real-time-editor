@@ -56,7 +56,7 @@ const NewPassword = () => {
               <div className={styles.icon}>{<LockOpen />}</div>
               <input
                 type="password"
-                id="password"
+                id="newPassword"
                 required
                 placeholder="Enter your new password"
               />
@@ -68,14 +68,63 @@ const NewPassword = () => {
               <div className={styles.icon}>{<LockOpen />}</div>
               <input
                 type="password"
-                id="password"
+                id="renterPassword"
                 required
                 placeholder="Reenter password"
               />
             </div>
           </div>
           {error && <p className={styles.error}>{error}</p>}
-          <button className={styles.login} type="submit">
+          <button
+            onClick={async (event) => {
+              event.preventDefault();
+              const storedEmail = localStorage.getItem("email");
+              const OTP = localStorage.getItem("otp");
+              const password = document.getElementById("newPassword").value;
+              const confirmPassword =
+                document.getElementById("renterPassword").value;
+
+              if (password !== confirmPassword) {
+                setError("Passwords do not match.");
+                return;
+              }
+
+              const body = JSON.stringify({
+                emailid: storedEmail,
+                password: password,
+              });
+
+              console.log(body);
+
+              try {
+                const response = await fetch(
+                  `http://pocapi.researchpick.com/api/changepassword`,
+                  {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: body,
+                  }
+                );
+                if (response.ok) {
+                  const data = await response.json();
+                  console.log(data);
+                  if (data.status === true) {
+                    localStorage.setItem("token", data.token);
+                    alert(data.message);
+                    window.location.href = "/";
+                  } else {
+                    alert(data.message);
+                  }
+                } else {
+                  setError("Login failed.");
+                }
+              } catch (error) {
+                setError("Login error:");
+              }
+            }}
+            className={styles.login}
+            type="submit"
+          >
             Update Password
           </button>
         </form>

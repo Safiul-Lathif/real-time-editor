@@ -154,6 +154,7 @@ const Home = () => {
   };
   useEffect(() => {
     const fetchData = async () => {
+      let token = localStorage.getItem("token");
       if (id === "new") {
         initializeEditor({
           time: Date.now(),
@@ -165,17 +166,26 @@ const Home = () => {
       }
       try {
         const response = await fetch(
-          `http://pocapi.researchpick.com/api/viewContent?id=${id}`
+          `http://pocapi.researchpick.com/api/viewContent?id=${id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         const result = await response.json();
-        previousData.blocks = result.blocks;
-        previousData.version = result.version;
-        previousData.time = result.time;
-        newDataS.blocks = result.blocks;
-        newDataS.version = result.version;
-        newDataS.time = result.time;
+
+        const data = JSON.parse(result["data"]);
+        previousData.blocks = data.blocks;
+        previousData.version = data.version;
+        previousData.time = data.time;
+        newDataS.blocks = data.blocks;
+        newDataS.version = data.version;
+        newDataS.time = data.time;
         setIsEdit(true);
-        initializeEditor(result);
+        initializeEditor(data);
       } catch (error) {
         initializeEditor({
           time: Date.now(),
@@ -223,16 +233,25 @@ const Home = () => {
   };
 
   const download = async () => {
+    let token = localStorage.getItem("token");
     try {
       const response = await fetch(
-        `http://pocapi.researchpick.com/api/downloadword?id=${id}`
+        `http://pocapi.researchpick.com/api/downloadword?id=${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       if (response.ok) {
-        const result = await response.text();
+        const result = await response.json();
+        console.log(result);
         alert(
           "File downloaded successfully. Please check the download folder."
         );
-        window.open(result, "_blank", "noopener,noreferrer");
+        window.open(result.filepath, "_blank", "noopener,noreferrer");
       } else {
         alert("Error downloading file.");
       }
