@@ -15,6 +15,7 @@ import NewPassword from "./pages/newPassoword/NewPassword.jsx";
 import Success from "./pages/Succes.jsx";
 import Credits from "./pages/credits/Credits.jsx";
 import ResearchPickPricing from "./pages/researchPickPricings/ResearchPickPrices.jsx";
+import OtpScreen from "./pages/otpScreen/OtpScreen.jsx";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="/newPassword" element={<NewPassword />} />
           <Route path="/checkEmail" element={<CheckEmail />} />
           <Route path="/profile" element={<ProfileScreen />} />
+          <Route path="/otpScreen" element={<OtpScreen />} />
           <Route path="/splashScreen" element={<SplashScreen />} />
           <Route path="/home" element={<ResearchPick />} />
           <Route path="/login" element={<Login />} />
