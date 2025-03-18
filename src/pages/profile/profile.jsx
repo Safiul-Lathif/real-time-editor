@@ -1,9 +1,9 @@
 // pages/profile.tsx
-import React from "react";
+import { React, useState, useEffect } from "react";
 import styled from "styled-components";
 import appLogo from "../../assets/app_logo.png";
 import { Link } from "react-router-dom";
-
+import { uc } from "../../api/UserController";
 // --- Components ---
 const Header = () => (
   <HeaderContainer>
@@ -25,7 +25,7 @@ const Header = () => (
       </ProjectDropdown>
       <LogoutButton
         onClick={() => {
-          localStorage.removeItem("token");
+          localStorage.clear();
           window.location.href = "/";
         }}
       >
@@ -35,13 +35,14 @@ const Header = () => (
   </HeaderContainer>
 );
 
-const ProfileCard = ({ name, email, lastUpdate }) => (
-  <CardContainer>
+const ProfileCard = ({ name, email, lastUpdate, profileImage }) => (
+  <CardContainer
+    onClick={() => {
+      window.location.href = "/editProfile";
+    }}
+  >
     <div style={{ display: "flex", alignItems: "center" }}>
-      <ProfileImage
-        src="https://media.licdn.com/dms/image/v2/C4D03AQFdX9FHzdCSYg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1646324063549?e=1744243200&v=beta&t=0fWXGZOdxmZ8Xh255N5WSQB6jrfjGpS4i0dpX2sn2lE"
-        alt="Profile"
-      />{" "}
+      <ProfileImage src={profileImage} alt="Profile" />{" "}
       {/* Replace with actual path */}
       <CardDetails>
         <Name>{name}</Name>
@@ -92,18 +93,39 @@ const LinkedAccounts = () => (
 );
 
 const ProfileScreen = () => {
-  const userData = {
-    name: "Safiul Lathif",
-    email: "safiullathif65@gmail.com",
-    lastUpdate: "January 10",
-    mobile: "+11 123 1234 123",
-    location: "New York",
-    country: "United States",
-    university: "Harvard University",
-    department: "Health",
-    specialist: "Heart",
-    timeZone: "Washington, DC, USA SOMT-60",
-  };
+  const [timeZoneList, setTimeZoneList] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [userData, setUserDetails] = useState({
+    name: "",
+    email: "",
+    lastUpdate: "",
+    mobile: "",
+    location: "",
+    country: "",
+    university: "",
+    department: "",
+    specialist: "",
+    timeZone: "",
+    profileImage: "",
+  });
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      const userData = await uc.fetchUserDetails();
+      setUserDetails(userData);
+    };
+    const fetchTimeZone = async () => {
+      const timeZone = await uc.fetchTimeZone();
+      setTimeZoneList(timeZone);
+    };
+    const fetchCountries = async () => {
+      const countries = await uc.fetchCountries();
+      setCountries(countries);
+    };
+    fetchUserDetails();
+    fetchTimeZone();
+    fetchCountries();
+  }, []);
 
   return (
     <PageContainer>
@@ -113,6 +135,7 @@ const ProfileScreen = () => {
           name={userData.name}
           email={userData.email}
           lastUpdate={userData.lastUpdate}
+          profileImage={userData.profileImage}
         />
 
         <TwoColumns>
@@ -121,14 +144,36 @@ const ProfileScreen = () => {
             <DetailItem label="Mobile" value={userData.mobile} />
             <DetailItem label="Email" value={userData.email} />
             <DetailItem label="Location" value={userData.location} />
-            <DetailItem label="Country" value={userData.country} />
+            <DetailItem
+              label="Country"
+              value={
+                countries.filter(
+                  (country) => country.CountryID === userData.country
+                ).length === 0
+                  ? userData.country
+                  : countries.find(
+                      (country) => country.CountryID === userData.country
+                    ).CountryName
+              }
+            />
           </DetailsSection>
 
           <DetailsSection title="Other Information">
             <DetailItem label="University" value={userData.university} />
             <DetailItem label="Department" value={userData.department} />
             <DetailItem label="Specialist" value={userData.specialist} />
-            <DetailItem label="Time Zone" value={userData.timeZone} />
+            <DetailItem
+              label="Time Zone"
+              value={
+                timeZoneList.filter(
+                  (timezone) => timezone.id === userData.timeZone
+                ).length === 0
+                  ? userData.timeZone
+                  : timeZoneList.find(
+                      (timezone) => timezone.id === userData.timeZone
+                    ).user_timezone
+              }
+            />
           </DetailsSection>
         </TwoColumns>
 

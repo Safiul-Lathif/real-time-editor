@@ -1,6 +1,6 @@
 import React from "react";
 import { ContactMail } from "@mui/icons-material";
-import appLogo from "../../assets/app_logo.png";
+import appLogo from "../../assets/app_logo_with_bg.png";
 import SettingsIcon from "@mui/icons-material/Settings";
 import "./sideBar.css";
 
@@ -11,8 +11,7 @@ const SideBar = () => {
         src={appLogo}
         alt="Research Pick Logo"
         style={{
-          width: 240,
-          height: 100,
+          width: 250,
           margin: "0 auto",
           marginBottom: "20px",
         }}

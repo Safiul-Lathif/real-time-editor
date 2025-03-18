@@ -7,9 +7,10 @@ export default async function handler({ newPost, isEdit, id, title }) {
   };
   let editedData = {
     id: id,
+    title: title,
     content: JSON.stringify(newPost),
   };
-
+  console.log(editedData);
   let response = await fetch(
     isEdit
       ? "http://pocapi.researchpick.com/api/editcontent"
@@ -25,7 +26,7 @@ export default async function handler({ newPost, isEdit, id, title }) {
   );
 
   if (response.ok) {
-    if (!isEdit) alert(isEdit ? "Edited Successfully" : "Added Success");
+    alert(isEdit ? "Edited Successfully" : "Added Success");
   } else {
     console.error("Error:", response.statusText);
   }

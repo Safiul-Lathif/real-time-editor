@@ -10,87 +10,11 @@ import {
 } from "@mui/icons-material";
 import SideBar from "../../components/sideBar/SideBar";
 import { TopBar } from "../../components/topBar/TopBar";
-import axios from "axios";
-const projectsData = [
-  // Sample project data (replace with your actual data)
-  {
-    id: 1,
-    title: "Types of stem cells and their usage",
-    authors: "You",
-    owner: "You",
-    lastModified: "20 minutes ago",
-    filterType: "your",
-    checkbox: false,
-  },
-  {
-    id: 2,
-    title: "The healthiest diet does not exist",
-    authors: "You",
-    owner: "You",
-    lastModified: "a day ago",
-    filterType: "your",
-    checkbox: false,
-  },
-  {
-    id: 3,
-    title: "Low carbohydrate vs, low-fat diets",
-    authors: "Prakash",
-    owner: "Prakash",
-    lastModified: "60 minutes ago",
-    filterType: "collaborations",
-    checkbox: false,
-  },
-  {
-    id: 4,
-    title: "How are black holes created?",
-    authors: "Vignesh",
-    owner: "Vignesh",
-    lastModified: "40 minutes ago",
-    filterType: "archived",
-    checkbox: false,
-  },
-  {
-    id: 5,
-    title: "What Causes Eating Disorders?",
-    authors: "You",
-    owner: "You",
-    lastModified: "1 hour ago",
-    filterType: "trashed",
-    checkbox: false,
-  },
-  {
-    id: 6,
-    title: "Types of stem cells and their usage",
-    authors: "You",
-    owner: "You",
-    lastModified: "20 minutes ago",
-    filterType: "your",
-    checkbox: false,
-  },
-  {
-    id: 7,
-    title: "Types of stem cells and their usage",
-    authors: "You",
-    owner: "You",
-    lastModified: "20 minutes ago",
-    filterType: "collaborations",
-    checkbox: false,
-  },
-  {
-    id: 8,
-    title: "Types of stem cells and their usage",
-    authors: "You",
-    owner: "You",
-    lastModified: "20 minutes ago",
-    filterType: "archived",
-    checkbox: false,
-  },
-];
 
 const ResearchPick = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterBy, setFilterBy] = useState("all_projects");
-  const [projects, setProjects] = useState(projectsData); // Initialize projects with data
+  const [projects, setProjects] = useState([]); // Initialize projects with data
 
   let filteredProjects = projects.filter((project) =>
     project.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -115,10 +39,14 @@ const ResearchPick = () => {
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
+          if (!data.data) {
+            setProjects([]);
+            return;
+          }
           setProjects(
             data.data.map((project) => {
               return {
-                id: 1,
+                id: project.id,
                 title: project.title,
                 authors: project.authors ?? "",
                 owner: project.owner_email,
@@ -317,15 +245,28 @@ const ResearchPick = () => {
                   <FileDownloadOff />
                   <Downloading
                     onClick={async () => {
+                      let token = localStorage.getItem("token");
                       const response = await fetch(
-                        `http://pocapi.researchpick.com/api/downloadword?id=${project.id}`
+                        `http://pocapi.researchpick.com/api/downloadword?id=${project.id}`,
+                        {
+                          method: "GET",
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                          },
+                        }
                       );
                       if (response.ok) {
-                        const result = await response.text();
+                        const result = await response.json();
+                        console.log(result);
                         alert(
                           "File downloaded successfully. Please check the download folder."
                         );
-                        window.open(result, "_blank", "noopener,noreferrer");
+                        window.open(
+                          result.filepath,
+                          "_blank",
+                          "noopener,noreferrer"
+                        );
                       } else {
                         alert("Error downloading file.");
                       }

@@ -1,7 +1,40 @@
 import { NotificationAdd } from "@mui/icons-material";
 import React from "react";
+import { useEffect, useState } from "react";
 
 export const TopBar = () => {
+  const [userDetails, setUserDetails] = useState({
+    profile_image: "",
+    user_first_name: "",
+    user_last_name: "",
+  });
+
+  useEffect(() => {
+    const getUserDetails = async () => {
+      let token = localStorage.getItem("token");
+      try {
+        const response = await fetch(
+          `http://pocapi.researchpick.com/api/getuserdetails`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.ok) {
+          const result = await response.json();
+          console.log(result);
+          setUserDetails(result.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    getUserDetails();
+  }, []);
+
   return (
     <header
       style={{
@@ -23,11 +56,17 @@ export const TopBar = () => {
         }}
       >
         <img
-          src="https://media.licdn.com/dms/image/v2/C4D03AQFdX9FHzdCSYg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1646324063549?e=1744243200&v=beta&t=0fWXGZOdxmZ8Xh255N5WSQB6jrfjGpS4i0dpX2sn2lE"
+          src={
+            userDetails.profile_image
+              ? userDetails.profile_image
+              : "https://th.bing.com/th/id/OIP.hGSCbXlcOjL_9mmzerqAbQHaHa?rs=1&pid=ImgDetMain"
+          }
           alt="User Avatar"
           className="avatar"
         />
-        <span className="user-name">Safiul Lathif</span>
+        <span className="user-name">
+          {userDetails.user_first_name} {userDetails.user_last_name}
+        </span>
       </div>
       <div
         style={{

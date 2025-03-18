@@ -1,233 +1,9 @@
-// import React from "react";
-// import appLogo from "../../assets/app_logo.png";
-// import styles from "./editProfile.module.css"; // Import CSS module
-
-// // --- Components ---
-// const Header = () => (
-//   <div className={styles.headerContainer}>
-//     <img
-//       src={appLogo}
-//       alt="Research Pick Logo"
-//       style={{ width: 240, height: 70 }}
-//     />
-//     <div className={styles.rightContent}>
-//       <button className={styles.projectDropdown}>Project</button>
-//       <button className={styles.logoutButton}>Logout</button>
-//     </div>
-//   </div>
-// );
-
-// const ProfileCard = ({ name, email, lastUpdate }) => (
-//   <div className={styles.cardContainer}>
-//     <div style={{ display: "flex", alignItems: "center" }}>
-//       <img
-//         src="https://media.licdn.com/dms/image/v2/C4D03AQFdX9FHzdCSYg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1646324063549?e=1744243200&v=beta&t=0fWXGZOdxmZ8Xh255N5WSQB6jrfjGpS4i0dpX2sn2lE"
-//         alt="Profile"
-//         style={{ width: 100, height: 100, borderRadius: "20%" }}
-//       />
-//       <div className={styles.cardDetails}>
-//         <h3 className={styles.name}>{name}</h3>
-//         <p className={styles.email}>{email}</p>
-//       </div>
-//     </div>
-//     <p className={styles.lastUpdate}>last update {lastUpdate}</p>
-//   </div>
-// );
-
-// const DetailsSection = ({ title, children }) => (
-//   <div className={styles.detailsContainer}>
-//     <h3 className={styles.sectionTitle}>{title}</h3>
-//     {children}
-//   </div>
-// );
-
-// const DetailItem = ({ label, value }) => (
-//   <div className={styles.detailItemContainer}>
-//     <dt className={styles.label}>{label}</dt>
-//     <dd className={styles.value}>{value}</dd>
-//   </div>
-// );
-
-// const EditProfile = () => (
-//   <div className={styles.container}>
-//     <div className={styles.form}>
-//       <h3 className={styles.sectionTitle}>Edit Profile</h3>
-//       <img
-//         src="https://media.licdn.com/dms/image/v2/C4D03AQFdX9FHzdCSYg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1646324063549?e=1744243200&v=beta&t=0fWXGZOdxmZ8Xh255N5WSQB6jrfjGpS4i0dpX2sn2lE"
-//         alt="Profile"
-//         style={{ width: 100, height: 100, borderRadius: "20%" }}
-//       />
-//       <form className={styles.forms}>
-//         <div className={styles.formGroup}>
-//           <label htmlFor="firstName">First Name*</label>
-//           <div className={styles.wrapper}>
-//             <input
-//               type="name"
-//               id="firstName"
-//               placeholder="Enter first name"
-//               required
-//             />
-//           </div>
-//         </div>
-//         <div className={styles.formGroup}>
-//           <label htmlFor="lastName">Last Name*</label>
-//           <div className={styles.wrapper}>
-//             <input
-//               type="name"
-//               id="lastName"
-//               placeholder="Enter last name"
-//               required
-//             />
-//           </div>
-//         </div>
-//         <div className={styles.formGroup}>
-//           <label htmlFor="firstName">Email Id</label>
-//           <div className={styles.wrapper}>
-//             <input
-//               type="email"
-//               id="firstName"
-//               placeholder="Enter first name"
-//               required
-//             />
-//           </div>
-//         </div>
-//         <div className={styles.formGroup}>
-//           <label htmlFor="lastName">Mobile Number</label>
-//           <div className={styles.wrapper}>
-//             <input
-//               type="number"
-//               id="lastName"
-//               placeholder="Enter last name"
-//               required
-//             />
-//           </div>
-//         </div>
-//         <div className={styles.formGroup}>
-//           <label htmlFor="universityName">University Name</label>
-//           <div className={styles.wrapper}>
-//             <input
-//               type="name"
-//               id="universityName"
-//               placeholder="Enter university name"
-//               required
-//             />
-//           </div>
-//         </div>
-//         <div className={styles.formGroup}>
-//           <label htmlFor="department">Department</label>
-//           <div className={styles.wrapper}>
-//             <input
-//               type="name"
-//               id="department"
-//               placeholder="Enter department"
-//               required
-//             />
-//           </div>
-//         </div>
-//         <div className={styles.formGroup}>
-//           <label htmlFor="speciality">Speciality</label>
-//           <div className={styles.wrapper}>
-//             <input
-//               type="name"
-//               id="speciality"
-//               placeholder="Enter speciality"
-//               required
-//             />
-//           </div>
-//         </div>
-//         <div className={styles.formGroup}>
-//           <label htmlFor="location">Location</label>
-//           <div className={styles.wrapper}>
-//             <input
-//               type="name"
-//               id="location"
-//               placeholder="Enter location"
-//               required
-//             />
-//           </div>
-//         </div>
-//         <div className={styles.formGroup}>
-//           <label htmlFor="country">Country</label>
-//           <div className={styles.wrapper}>
-//             <select id="country" required>
-//               <option value="">Select country</option>
-//               {["United States", "India", "United Kingdom"].map(
-//                 (country, index) => (
-//                   <option key={index} value={country}>
-//                     {country}
-//                   </option>
-//                 )
-//               )}
-//             </select>
-//           </div>
-//         </div>
-//         <div className={styles.formGroup}>
-//           <label htmlFor="timezone">Timezone</label>
-//           <div className={styles.wrapper}>
-//             <select id="timezone" required>
-//               <option value="">Select timezone</option>
-//               {["UTC", "EST", "CST", "MST", "PST"].map((timezone, index) => (
-//                 <option key={index} value={timezone}>
-//                   {timezone}
-//                 </option>
-//               ))}
-//             </select>
-//           </div>
-//         </div>
-//         <div
-//           style={{
-//             display: "flex",
-//             gap: "20px",
-//           }}
-//         >
-//           <button
-//             style={{
-//               backgroundColor: "white",
-//               color: "rgb(91, 3, 91)",
-//               padding: "10px 30px",
-//               border: "1px solid rgb(91, 3, 91)",
-//               borderRadius: "30px",
-//               cursor: "pointer",
-//               fontWeight: "bold",
-//             }}
-//           >
-//             cancel{" "}
-//           </button>
-//           <button className={styles.projectDropdown}>Update Profile </button>
-//         </div>
-//       </form>
-//     </div>
-//   </div>
-// );
-
-// const EditProfileScreen = () => {
-//   const userData = {
-//     name: "Safiul Lathif",
-//     email: "safiullathif65@gmail.com",
-//     lastUpdate: "January 10",
-//     mobile: "+11 123 1234 123",
-//     location: "New York",
-//     country: "United States",
-//     university: "Harvard University",
-//     department: "Health",
-//     specialist: "Heart",
-//     timeZone: "Washington, DC, USA SOMT-60",
-//   };
-
-//   return (
-//     <div className={styles.pageContainer}>
-//       <Header />
-//       <EditProfile />
-//     </div>
-//   );
-// };
-
-// export default EditProfileScreen;
-// pages/editProfile.tsx
-import React from "react";
 import styled from "styled-components";
 import appLogo from "../../assets/app_logo.png";
 import styles from "./editProfile.module.css"; // Import CSS module
+import { React, useState, useEffect } from "react";
+import { SelectImage } from "../../components/SelectImage";
+import { uc } from "../../api/UserController";
 
 // --- Components ---
 const Header = () => (
@@ -247,56 +23,13 @@ const Header = () => (
   </HeaderContainer>
 );
 
-const ProfileCard = ({ name, email, lastUpdate }) => (
-  <CardContainer>
-    <div style={{ display: "flex", alignItems: "center" }}>
-      <ProfileImage
-        src="https://media.licdn.com/dms/image/v2/C4D03AQFdX9FHzdCSYg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1646324063549?e=1744243200&v=beta&t=0fWXGZOdxmZ8Xh255N5WSQB6jrfjGpS4i0dpX2sn2lE"
-        alt="Profile"
-      />{" "}
-      {/* Replace with actual path */}
-      <CardDetails>
-        <Name>{name}</Name>
-        <span
-          style={{
-            color: "#777",
-            fontSize: "14px",
-            fontWeight: "300",
-            marginTop: "3px",
-            letterSpacing: "0.4px",
-          }}
-        >
-          {email}
-        </span>
-      </CardDetails>
-    </div>
-    <LastUpdate>last update {lastUpdate}</LastUpdate>
-  </CardContainer>
-);
-
-const DetailsSection = ({ title, children }) => (
-  <DetailsContainer>
-    <SectionTitle>{title}</SectionTitle>
-    {children}
-  </DetailsContainer>
-);
-
-const DetailItem = ({ label, value }) => (
-  <DetailItemContainer>
-    <Label>{label}:</Label>
-    <Value>{value}</Value>
-  </DetailItemContainer>
-);
-
-const EditProfile = () => (
+const EditProfile = ({ userData, timeZoneList, countries }) => (
   <div className={styles.container}>
     <div className={styles.form}>
       <SectionTitle>Edit Profile</SectionTitle>
-      <ProfileImage
-        src="https://media.licdn.com/dms/image/v2/C4D03AQFdX9FHzdCSYg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1646324063549?e=1744243200&v=beta&t=0fWXGZOdxmZ8Xh255N5WSQB6jrfjGpS4i0dpX2sn2lE"
-        alt="Profile"
-      />
-      <form className={styles.forms}>
+
+      <form id="editForm" className={styles.forms}>
+        <SelectImage userData={userData} />
         <div className={styles.formGroup}>
           <label htmlFor="firstName">First Name*</label>
           <div className={styles.wrapper}>
@@ -305,6 +38,7 @@ const EditProfile = () => (
               id="firstName"
               placeholder="Enter first name"
               required
+              defaultValue={userData.initialFirstName}
             />
           </div>
         </div>
@@ -316,28 +50,20 @@ const EditProfile = () => (
               id="lastName"
               placeholder="Enter last name"
               required
+              defaultValue={userData.initialLastName}
             />
           </div>
         </div>
+
         <div className={styles.formGroup}>
-          <label htmlFor="firstName">Email Id</label>
-          <div className={styles.wrapper}>
-            <input
-              type="email"
-              id="firstName"
-              placeholder="Enter first name"
-              required
-            />
-          </div>
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="lastName">Mobile Number</label>
+          <label htmlFor="mobileNumber">Mobile Number</label>
           <div className={styles.wrapper}>
             <input
               type="number"
-              id="lastName"
-              placeholder="Enter last name"
+              id="mobileNumber"
+              placeholder="Enter mobile number"
               required
+              defaultValue={userData.initialMobileNumber}
             />
           </div>
         </div>
@@ -349,6 +75,7 @@ const EditProfile = () => (
               id="universityName"
               placeholder="Enter university name"
               required
+              defaultValue={userData.initialUniversityName}
             />
           </div>
         </div>
@@ -360,6 +87,7 @@ const EditProfile = () => (
               id="department"
               placeholder="Enter department"
               required
+              defaultValue={userData.initialDepartment}
             />
           </div>
         </div>
@@ -371,6 +99,7 @@ const EditProfile = () => (
               id="speciality"
               placeholder="Enter speciality"
               required
+              defaultValue={userData.initialSpeciality}
             />
           </div>
         </div>
@@ -382,32 +111,51 @@ const EditProfile = () => (
               id="location"
               placeholder="Enter location"
               required
+              defaultValue={userData.initialLocation}
             />
           </div>
         </div>
         <div className={styles.formGroup}>
           <label htmlFor="country">Country</label>
           <div className={styles.wrapper}>
-            <select id="country" required>
+            <select
+              id="country"
+              required
+              defaultValue={userData.initialCountry}
+              onChange={(e) => {
+                const countryName = e.target.value;
+                console.log(countryName);
+                const country = countries.find(
+                  (country) => country.CountryName === countryName
+                ).CountryID;
+                userData.initialCountry = country;
+              }}
+            >
               <option value="">Select country</option>
-              {["United States", "India", "United Kingdom"].map(
-                (country, index) => (
-                  <option key={index} value={country}>
-                    {country}
-                  </option>
-                )
-              )}
+              {countries.map((country, index) => (
+                <option key={index} value={country.CountryId}>
+                  {country.CountryName}
+                </option>
+              ))}
             </select>
           </div>
         </div>
         <div className={styles.formGroup}>
           <label htmlFor="timezone">Timezone</label>
           <div className={styles.wrapper}>
-            <select id="timezone" required>
+            <select
+              id="timezone"
+              required
+              defaultValue={userData.initialTimezone}
+              onChange={(e) => {
+                const timeZone = e.target.value;
+                userData.initialTimezone = timeZone;
+              }}
+            >
               <option value="">Select timezone</option>
-              {["UTC", "EST", "CST", "MST", "PST"].map((timezone, index) => (
-                <option key={index} value={timezone}>
-                  {timezone}
+              {timeZoneList.map((timezone, index) => (
+                <option key={index} value={timezone.id}>
+                  {timezone.user_timezone}
                 </option>
               ))}
             </select>
@@ -432,7 +180,54 @@ const EditProfile = () => (
           >
             cancel{" "}
           </button>
-          <button className={styles.projectDropdown}>Update Profile </button>
+          <button
+            onClick={(e) => {
+              const token = localStorage.getItem("token");
+              e.preventDefault();
+
+              const body = JSON.stringify({
+                first_name: document.getElementById("firstName").value,
+                last_name: document.getElementById("lastName").value,
+                university_name:
+                  document.getElementById("universityName").value,
+                department: document.getElementById("department").value,
+                speciality: document.getElementById("speciality").value,
+                location: document.getElementById("location").value,
+                mobile_no: document.getElementById("mobileNumber").value,
+                country: userData.initialCountry,
+                user_timezone: userData.initialTimezone,
+                id: userData.userId,
+                profile_image: userData.profileImage,
+              });
+
+              console.log(body);
+              fetch("http://pocapi.researchpick.com/api/updateuser", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: body,
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  // Handle successful login response
+                  console.log("Edited successful:", data);
+                  if (data.status === true) {
+                    alert(data.message);
+                  } else {
+                    alert(data.message);
+                  }
+                })
+                .catch((error) => {
+                  // Handle login error
+                  console.error("Login error:", error);
+                });
+            }}
+            className={styles.projectDropdown}
+          >
+            Update Profile
+          </button>
         </div>
       </form>
     </div>
@@ -440,23 +235,82 @@ const EditProfile = () => (
 );
 
 const EditProfileScreen = () => {
-  const userData = {
-    name: "Safiul Lathif",
-    email: "safiullathif65@gmail.com",
-    lastUpdate: "January 10",
-    mobile: "+11 123 1234 123",
-    location: "New York",
-    country: "United States",
-    university: "Harvard University",
-    department: "Health",
-    specialist: "Heart",
-    timeZone: "Washington, DC, USA SOMT-60",
-  };
+  const [timeZoneList, setTimeZoneList] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [userData, setUserDetails] = useState({
+    initialFirstName: "",
+    initialLastName: "",
+    initialEmail: "",
+    initialMobileNumber: "",
+    initialUniversityName: "",
+    initialDepartment: "",
+    initialSpeciality: "",
+    initialLocation: "",
+    initialCountry: "",
+    initialTimezone: "",
+    profileImage: "",
+  });
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const response = await fetch(
+          `http://pocapi.researchpick.com/api/getuserdetails`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+          const user = {
+            initialFirstName: data.data.user_first_name,
+            initialLastName: data.data.user_last_name,
+            initialEmail: data.data.user_email,
+            initialMobileNumber: data.data.mobile_no ? data.data.mobile_no : "",
+            initialUniversityName: data.data.university_name,
+            initialDepartment: data.data.department,
+            initialSpeciality: data.data.speciality,
+            initialLocation: data.data.location,
+            initialCountry: data.data.country,
+            initialTimezone: data.data.user_timezone,
+            userId: data.data.id,
+            profileImage: data.data.profile_image
+              ? data.data.profile_image
+              : "https://th.bing.com/th/id/OIP.hGSCbXlcOjL_9mmzerqAbQHaHa?rs=1&pid=ImgDetMain",
+          };
+          setUserDetails(user);
+        }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+    const fetchTimeZone = async () => {
+      const timeZone = await uc.fetchTimeZone();
+      setTimeZoneList(timeZone);
+    };
+    const fetchCountries = async () => {
+      const countries = await uc.fetchCountries();
+      setCountries(countries);
+    };
+    fetchTimeZone();
+    fetchCountries();
+    fetchUserDetails();
+  }, []);
 
   return (
     <PageContainer>
       <Header />
-      <EditProfile />
+      <EditProfile
+        userData={userData}
+        timeZoneList={timeZoneList}
+        countries={countries}
+      />
     </PageContainer>
   );
 };
