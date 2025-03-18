@@ -1,12 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../signUp/signUp.module.css";
 import appLogo from "../../assets/app_logo.png";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import { LockOpenOutlined } from "@mui/icons-material";
+import { uc } from "../../api/UserController";
 
 const SignUp = () => {
+  const [timeZoneList, setTimeZoneList] = useState([]);
+  const [countries, setCountries] = useState([]);
   const email = localStorage.getItem("email");
   const userId = localStorage.getItem("userId");
+  useEffect(() => {
+    const fetchTimeZone = async () => {
+      const timeZone = await uc.fetchTimeZone();
+      setTimeZoneList(timeZone);
+    };
+    const fetchCountries = async () => {
+      const countries = await uc.fetchCountries();
+      setCountries(countries);
+    };
+    fetchTimeZone();
+    fetchCountries();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -111,13 +126,12 @@ const SignUp = () => {
             <div className={styles.wrapper}>
               <select id="country" required>
                 <option value="">Select country</option>
-                {["United States", "India", "United Kingdom"].map(
-                  (country, index) => (
-                    <option key={index} value={country}>
-                      {country}
-                    </option>
-                  )
-                )}
+                <option value="">Select country</option>
+                {countries.map((country, index) => (
+                  <option key={index} value={country.CountryId}>
+                    {country.CountryName}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -126,9 +140,9 @@ const SignUp = () => {
             <div className={styles.wrapper}>
               <select id="timezone" required>
                 <option value="">Select timezone</option>
-                {["UTC", "EST", "CST", "MST", "PST"].map((timezone, index) => (
-                  <option key={index} value={timezone}>
-                    {timezone}
+                {timeZoneList.map((timezone, index) => (
+                  <option key={index} value={timezone.id}>
+                    {timezone.user_timezone}
                   </option>
                 ))}
               </select>
@@ -166,8 +180,12 @@ const SignUp = () => {
               department: document.getElementById("department").value,
               speciality: document.getElementById("speciality").value,
               location: document.getElementById("location").value,
-              country: "1",
-              user_timezone: "1",
+              country: countries.find(
+                (country) =>
+                  country.CountryName ===
+                  document.getElementById("country").value
+              ).CountryID,
+              user_timezone: document.getElementById("timezone").value,
               id: userId,
               password: document.getElementById("password").value, // Assuming password is hardcoded
             });
