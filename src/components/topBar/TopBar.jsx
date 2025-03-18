@@ -1,8 +1,11 @@
 import { NotificationAdd } from "@mui/icons-material";
 import React from "react";
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
+
 
 export const TopBar = () => {
+  const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState({
     profile_image: "",
     user_first_name: "",
@@ -45,7 +48,7 @@ export const TopBar = () => {
         padding: "0px 15px 15px 15px",
         borderBottom: "2px solid #ccc",
       }}
-      onClick={() => (window.location.href = "/profile")}
+      onClick={() => (navigate("/profile"))}
     >
       <div
         style={{

@@ -5,6 +5,8 @@ import googleLogo from "../../assets/google.png";
 import appleLogo from "../../assets/apple-logo.png";
 import appLogo from "../../assets/app_logo.png";
 import { EmailOutlined, LockOpen, Password } from "@mui/icons-material";
+import { useNavigate } from 'react-router-dom';
+
 // import {
 //   EmailOutline,
 //   Lock,
@@ -14,6 +16,7 @@ import { EmailOutlined, LockOpen, Password } from "@mui/icons-material";
 // } from "mdi-material-ui";
 
 const NewPassword = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -111,7 +114,7 @@ const NewPassword = () => {
                   if (data.status === true) {
                     localStorage.setItem("token", data.token);
                     alert(data.message);
-                    window.location.href = "/";
+                    navigate("/");
                   } else {
                     alert(data.message);
                   }

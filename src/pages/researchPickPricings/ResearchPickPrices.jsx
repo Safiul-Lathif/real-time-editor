@@ -1,245 +1,179 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./ResearchPickPricing.css"; // Create a CSS file for styling
 import Header from "../../components/header/Header";
 import visaIcon from "../../assets/all_payment.png";
-import masterCardIcon from "../../assets/mastercard.png";
-import paypalIcon from "../../assets/paypal.png";
+import PayPalCheckout from "../../components/PayPal";
+import ExpandableGrid from "../../sample";
 
 function ResearchPickPricing() {
+  const [packageDetails, setPackageDetails] = useState([]);
+  const [showPayPal, setShowPayPal] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState(null);
+  useEffect(() => {
+    const fetchPackageDetails = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const response = await fetch(
+          "http://pocapi.researchpick.com/api/packagedetails",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        console.log(data);
+        setPackageDetails(data.package_details);
+      } catch (error) {
+        console.error("Error fetching package details:", error);
+      }
+    };
+
+    fetchPackageDetails();
+  }, []);
+
   return (
-    <div className="pricing-page">
-      <div
-        style={{
-          backgroundColor: "rgb(91, 3, 91)",
-        }}
-      >
+    <div style={{ backgroundColor: "rgb(91, 3, 91)" }}>
+      <div>
         <Header />
         <div className="page-title">ResearchPick plans and pricing</div>
       </div>
-      {/* <div className="content">
+      <div className="pricing-page">
         <div className="intro">
           <h1>Get the best ResearchPick experience</h1>
-          <p>
+          <p
+            style={{
+              fontSize: "14px",
+              fontWeight: "500",
+              letterSpacing: "0.5px",
+            }}
+          >
             We have several powerful plans for everyone - from individual
             students and researchers, to large businesses and universities.
             Everything you need.
           </p>
         </div>
+        <div className="content">
+          <div className="plans ">
+            {packageDetails.map((packageDetail, index) => (
+              <div
+                key={index}
+                className={`plan ${packageDetail.package_name
+                  .toLowerCase()
+                  .replace(/\s/g, "-")}`}
+              >
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <div
+                    style={{
+                      fontSize: "22px",
+                      fontWeight: "700",
+                      letterSpacing: "0.5px",
+                    }}
+                  >
+                    {packageDetail.package_name}
+                  </div>
+                  {packageDetail.package_name
+                    .toLowerCase()
+                    .replace(/\s/g, "-") === "super-pro" ? (
+                    <div className="save-badge">Save $10</div>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+                <ul>
+                  {packageDetail.package_description.map(
+                    (packageDetail, index) => (
+                      <li key={index}>
+                        <span role="img" aria-label="check">
+                          ✓
+                        </span>{" "}
+                        {packageDetail}
+                      </li>
+                    )
+                  )}
+                  {packageDetails
+                    .filter(
+                      (packageDetail) =>
+                        packageDetail.package_name
+                          .toLowerCase()
+                          .replace(/\s/g, "-") === "super-pro"
+                    )[0]
+                    .package_description.filter(
+                      (item) =>
+                        !packageDetail.package_description.includes(item)
+                    )
+                    .map((packageDetail, index) => (
+                      <li key={index} className="cross">
+                        <span role="img" aria-label="cross">
+                          ✗
+                        </span>{" "}
+                        {packageDetail}
+                      </li>
+                    ))}
+                </ul>
+                {packageDetail.amount === 0 ? (
+                  <div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div className="price">$0</div>
+                      <div className="validity">14 days valid</div>
+                    </div>
+                    <button className="current-plan-button">
+                      Current Plan
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="price">${packageDetail.amount}</div>
+                    {
+                      (showPayPal && selectedPackage === packageDetail.package_name) ?
 
-        <div className="plans">
-          <div className="plan trial">
-            <h3>Trial</h3>
-            <ul>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                1 Article
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Content Editor
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Real time Collaboration
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Track Changes
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Word Export
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Publisher specific predefined alerts
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Unlimited validity
-              </li>
-              <li>
-                <span role="img" aria-label="cross">
-                  ✗
-                </span>{" "}
-                Pre-Submission Review
-              </li>
-              <li>
-                <span role="img" aria-label="cross">
-                  ✗
-                </span>{" "}
-                End-to-end Submission Service
-              </li>
-            </ul>
-            <div className="price">$0</div>
-            <div className="validity">14 days valid</div>
-            <button className="current-plan-button">Current Plan</button>
+                        (<PayPalCheckout amount={`${packageDetail.amount}`} />) : (<button
+                          className={`buy-button ${packageDetail.package_name
+                            .toLowerCase()
+                            .replace(/\s/g, "-") === "super-pro" ? "active" : ""} `}
+                          onClick={() => { setShowPayPal(true); setSelectedPackage(packageDetail.package_name) }}
+                        >
+                          Buy
+                        </button>)}
+                  </div>
+                )}
+              </div>
+            ))}
+
+            <div className="plan institution">
+              <h3>Institution</h3>
+              <p>
+                Site-wide access available for large institutions and
+                organizations.
+              </p>
+              <p>
+                For better solutions please contact us for customized pricing
+                based on your need.
+              </p>
+              <button className="contact-button">Contact</button>
+            </div>
           </div>
-
-          <div className="plan pro">
-            <h3>Pro</h3>
-            <ul>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                1 Article
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Content Editor
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Real time Collaboration
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Track Changes
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Word Export
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Publisher specific predefined alerts
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Unlimited validity
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Pre-Submission Review
-              </li>
-              <li>
-                <span role="img" aria-label="cross">
-                  ✗
-                </span>{" "}
-                End-to-end Submission Service
-              </li>
-            </ul>
-            <div className="price">$79</div>
-            <button className="buy-button">Buy</button>
-          </div>
-
-          <div className="plan super-pro">
-            <div className="save-badge">Save $10</div>
-            <h3>Super Pro</h3>
-            <ul>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                1 Article
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Content Editor
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Real time Collaboration
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Track Changes
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Word Export
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Publisher specific predefined alerts
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Unlimited validity
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                Pre-Submission Review
-              </li>
-              <li>
-                <span role="img" aria-label="check">
-                  ✓
-                </span>{" "}
-                End-to-end Submission Service
-              </li>
-            </ul>
-            <div className="price">$99</div>
-            <button className="buy-button">Buy</button>
-          </div>
-
-          <div className="plan institution">
-            <h3>Institution</h3>
+          <div className="footer">
             <p>
-              Site-wide access available for large institutions and
-              organizations.
+              All prices displayed are in DOLLAR. Prices may be subject to
+              additional VAT, depending on your country.
             </p>
-            <p>
-              For better solutions please contact us for customized pricing
-              based on your need.
-            </p>
-            <button className="contact-button">Contact</button>
+            <div className="payment-icons">
+              <img src={visaIcon} alt="Visa" />
+            </div>
           </div>
-        </div> */}
-
-      <div className="footer">
-        <p>
-          All prices displayed are in DOLLAR. Prices may be subject to
-          additional VAT, depending on your country.
-        </p>
-        <div className="payment-icons">
-          <img src={visaIcon} alt="Visa" />
         </div>
       </div>
-    </div>
-    // </div>
+    </div >
   );
 }
 

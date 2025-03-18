@@ -4,8 +4,10 @@ import styled from "styled-components";
 import appLogo from "../../assets/app_logo.png";
 import { Link } from "react-router-dom";
 import { uc } from "../../api/UserController";
+import { useNavigate } from 'react-router-dom';
 // --- Components ---
-const Header = () => (
+const Header = ({ navigate }) => (
+
   <HeaderContainer>
     <img
       src={appLogo}
@@ -18,7 +20,7 @@ const Header = () => (
     <RightContent>
       <ProjectDropdown
         onClick={() => {
-          window.location.href = "/";
+          navigate("/");
         }}
       >
         Project
@@ -26,7 +28,7 @@ const Header = () => (
       <LogoutButton
         onClick={() => {
           localStorage.clear();
-          window.location.href = "/";
+          navigate("/");
         }}
       >
         Logout
@@ -35,10 +37,10 @@ const Header = () => (
   </HeaderContainer>
 );
 
-const ProfileCard = ({ name, email, lastUpdate, profileImage }) => (
+const ProfileCard = ({ name, email, lastUpdate, profileImage, navigate }) => (
   <CardContainer
     onClick={() => {
-      window.location.href = "/editProfile";
+      navigate("/editProfile");
     }}
   >
     <div style={{ display: "flex", alignItems: "center" }}>
@@ -93,6 +95,7 @@ const LinkedAccounts = () => (
 );
 
 const ProfileScreen = () => {
+  const navigate = useNavigate();
   const [timeZoneList, setTimeZoneList] = useState([]);
   const [countries, setCountries] = useState([]);
   const [userData, setUserDetails] = useState({
@@ -129,13 +132,14 @@ const ProfileScreen = () => {
 
   return (
     <PageContainer>
-      <Header />
+      <Header navigate={navigate} />
       <ContentContainer>
         <ProfileCard
           name={userData.name}
           email={userData.email}
           lastUpdate={userData.lastUpdate}
           profileImage={userData.profileImage}
+          navigate={navigate}
         />
 
         <TwoColumns>
@@ -152,8 +156,8 @@ const ProfileScreen = () => {
                 ).length === 0
                   ? userData.country
                   : countries.find(
-                      (country) => country.CountryID === userData.country
-                    ).CountryName
+                    (country) => country.CountryID === userData.country
+                  ).CountryName
               }
             />
           </DetailsSection>
@@ -170,8 +174,8 @@ const ProfileScreen = () => {
                 ).length === 0
                   ? userData.timeZone
                   : timeZoneList.find(
-                      (timezone) => timezone.id === userData.timeZone
-                    ).user_timezone
+                    (timezone) => timezone.id === userData.timeZone
+                  ).user_timezone
               }
             />
           </DetailsSection>

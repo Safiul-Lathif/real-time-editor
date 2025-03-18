@@ -1,7 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import appLogo from "../../assets/app_logo_with_bg.png";
+import { useNavigate } from 'react-router-dom';
+
 const Header = () => {
+  const navigate = useNavigate();
   return (
     <HeaderContainer>
       <img
@@ -15,7 +18,7 @@ const Header = () => {
       <RightContent>
         <ProjectDropdown
           onClick={() => {
-            window.location.href = "/";
+            navigate("/");
           }}
         >
           Project
@@ -23,7 +26,7 @@ const Header = () => {
         <LogoutButton
           onClick={() => {
             localStorage.clear();
-            window.location.href = "/";
+            navigate("/");
           }}
         >
           Logout

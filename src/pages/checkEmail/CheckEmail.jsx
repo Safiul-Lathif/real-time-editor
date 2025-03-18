@@ -6,6 +6,8 @@ import appleLogo from "../../assets/apple-logo.png";
 import appLogo from "../../assets/app_logo.png";
 import { EmailOutlined } from "@mui/icons-material";
 import PinField from "react-pin-field";
+import { useNavigate } from 'react-router-dom';
+
 // import {
 //   EmailOutline,
 //   Lock,
@@ -15,6 +17,7 @@ import PinField from "react-pin-field";
 // } from "mdi-material-ui";
 
 const CheckEmail = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [OTP, setOTP] = useState("");
   const [error, setError] = useState(null);
@@ -102,7 +105,7 @@ const CheckEmail = () => {
                   console.log(data);
                   if (data.status === true) {
                     localStorage.setItem("userId", data.id);
-                    window.location.href = "/register";
+                    navigate("/register");
                   } else {
                     alert(data.message);
                   }

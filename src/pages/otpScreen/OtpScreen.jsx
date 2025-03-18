@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import styles from "./otpScreen.module.css"; // Import CSS module
 import appLogo from "../../assets/app_logo.png";
 import PinField from "react-pin-field";
+import { useNavigate } from 'react-router-dom';
 
 const OtpScreen = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [OTP, setOTP] = useState("");
   const [error, setError] = useState(null);
@@ -91,7 +93,7 @@ const OtpScreen = () => {
                   const data = await response.json();
                   console.log(data);
                   if (data.status === true) {
-                    window.location.href = "/newPassword";
+                    navigate("/newPassword");
                   } else {
                     alert(data.message);
                   }
