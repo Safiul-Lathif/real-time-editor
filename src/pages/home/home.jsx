@@ -137,7 +137,14 @@ const ResearchPick = () => {
               >
                 You are on the free plan
               </span>
-              <button className="upgrade-button">Upgrade</button>
+              <button
+                className="upgrade-button"
+                onClick={() => {
+                  window.location.href = "/researchPickPricing";
+                }}
+              >
+                Upgrade
+              </button>
             </div>
           </div>
           <ul

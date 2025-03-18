@@ -1,24 +1,24 @@
 import React from "react";
 import "./ResearchPickPricing.css"; // Create a CSS file for styling
+import Header from "../../components/header/Header";
+import visaIcon from "../../assets/all_payment.png";
+import masterCardIcon from "../../assets/mastercard.png";
+import paypalIcon from "../../assets/paypal.png";
 
 function ResearchPickPricing() {
   return (
     <div className="pricing-page">
-      <header className="header">
-        <div className="logo">
-          RESEARCH<span className="logo-highlight">PICK</span>
-        </div>
-        <div className="header-actions">
-          <button className="project-button">Project</button>
-          <button className="logout-button">Logout</button>
-        </div>
-      </header>
-
-      <div className="content">
+      <div
+        style={{
+          backgroundColor: "rgb(91, 3, 91)",
+        }}
+      >
+        <Header />
         <div className="page-title">ResearchPick plans and pricing</div>
-
+      </div>
+      {/* <div className="content">
         <div className="intro">
-          <h2>Get the best ResearchPick experience</h2>
+          <h1>Get the best ResearchPick experience</h1>
           <p>
             We have several powerful plans for everyone - from individual
             students and researchers, to large businesses and universities.
@@ -227,19 +227,19 @@ function ResearchPickPricing() {
             </p>
             <button className="contact-button">Contact</button>
           </div>
-        </div>
+        </div> */}
 
-        <div className="footer">
-          <p>
-            All prices displayed are in DOLLAR. Prices may be subject to
-            additional VAT, depending on your country.
-          </p>
-          <div className="payment-icons">
-            {/* Add your payment icons here */}
-          </div>
+      <div className="footer">
+        <p>
+          All prices displayed are in DOLLAR. Prices may be subject to
+          additional VAT, depending on your country.
+        </p>
+        <div className="payment-icons">
+          <img src={visaIcon} alt="Visa" />
         </div>
       </div>
     </div>
+    // </div>
   );
 }
 
