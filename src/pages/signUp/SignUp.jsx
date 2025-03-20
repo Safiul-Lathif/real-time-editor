@@ -207,7 +207,7 @@ const SignUp = () => {
                 if (data.status === true) {
                   localStorage.setItem("token", data.token);
                   alert(data.message);
-                  navigate("/");
+                  navigate("/home");
                 } else {
                   alert(data.message);
                 }

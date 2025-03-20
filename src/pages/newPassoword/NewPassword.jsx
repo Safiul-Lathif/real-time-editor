@@ -114,7 +114,7 @@ const NewPassword = () => {
                   if (data.status === true) {
                     localStorage.setItem("token", data.token);
                     alert(data.message);
-                    navigate("/");
+                    navigate("/login");
                   } else {
                     alert(data.message);
                   }

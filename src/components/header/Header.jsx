@@ -49,7 +49,7 @@ const Header = () => {
         <LogoutButton
           onClick={() => {
             localStorage.clear();
-            navigate("/");
+            navigate("/logout");
           }}
         >
           <div style={{
