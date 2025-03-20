@@ -4,8 +4,11 @@ import appLogo from "../../assets/app_logo.png";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import { LockOpenOutlined } from "@mui/icons-material";
 import { uc } from "../../api/UserController";
+import { useNavigate } from 'react-router-dom';
+
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [timeZoneList, setTimeZoneList] = useState([]);
   const [countries, setCountries] = useState([]);
   const email = localStorage.getItem("email");
@@ -204,7 +207,7 @@ const SignUp = () => {
                 if (data.status === true) {
                   localStorage.setItem("token", data.token);
                   alert(data.message);
-                  window.location.href = "/";
+                  navigate("/home");
                 } else {
                   alert(data.message);
                 }

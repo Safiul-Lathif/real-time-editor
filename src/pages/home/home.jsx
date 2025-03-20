@@ -10,8 +10,11 @@ import {
 } from "@mui/icons-material";
 import SideBar from "../../components/sideBar/SideBar";
 import { TopBar } from "../../components/topBar/TopBar";
+import { useNavigate } from 'react-router-dom';
+
 
 const ResearchPick = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterBy, setFilterBy] = useState("all_projects");
   const [projects, setProjects] = useState([]); // Initialize projects with data
@@ -74,7 +77,11 @@ const ResearchPick = () => {
       }}
     >
       <SideBar />
-      <div className="content">
+      <div style={{
+        width: "100%",
+        padding: "20px 30px",
+        backgroundColor: "#f0f0f0",
+      }}>
         <TopBar />
         <div className="project-area">
           <div
@@ -87,41 +94,36 @@ const ResearchPick = () => {
           >
             <div className="project-filters">
               <button
-                className={`filter-button ${
-                  filterBy === "all_projects" ? "active" : ""
-                }`}
+                className={`filter-button ${filterBy === "all_projects" ? "active" : ""
+                  }`}
                 onClick={() => setFilterBy("all_projects")}
               >
                 All Projects
               </button>
               <button
-                className={`filter-button ${
-                  filterBy === "owner" ? "active" : ""
-                }`}
+                className={`filter-button ${filterBy === "owner" ? "active" : ""
+                  }`}
                 onClick={() => setFilterBy("owner")}
               >
                 Your Projects
               </button>
               <button
-                className={`filter-button ${
-                  filterBy === "collaborator" ? "active" : ""
-                }`}
+                className={`filter-button ${filterBy === "collaborator" ? "active" : ""
+                  }`}
                 onClick={() => setFilterBy("collaborator")}
               >
                 Your Collaborations
               </button>
               <button
-                className={`filter-button ${
-                  filterBy === "archived" ? "active" : ""
-                }`}
+                className={`filter-button ${filterBy === "archived" ? "active" : ""
+                  }`}
                 onClick={() => setFilterBy("archived")}
               >
                 Archived Projects
               </button>
               <button
-                className={`filter-button ${
-                  filterBy === "trashed" ? "active" : ""
-                }`}
+                className={`filter-button ${filterBy === "trashed" ? "active" : ""
+                  }`}
                 onClick={() => setFilterBy("trashed")}
               >
                 Trashed Projects
@@ -137,7 +139,14 @@ const ResearchPick = () => {
               >
                 You are on the free plan
               </span>
-              <button className="upgrade-button">Upgrade</button>
+              <button
+                className="upgrade-button"
+                onClick={() => {
+                  navigate("/researchPickPricing");
+                }}
+              >
+                Upgrade
+              </button>
             </div>
           </div>
           <ul
@@ -175,7 +184,7 @@ const ResearchPick = () => {
               </div>
               <button
                 className="outlined-button"
-                onClick={() => (window.location.href = "/project/new")}
+                onClick={() => (navigate("/project/new"))}
               >
                 <Add style={{ marginRight: "5px" }} />
                 New project
@@ -229,7 +238,7 @@ const ResearchPick = () => {
                 />
                 <div
                   onClick={() =>
-                    (window.location.href = `/project/${project.id}`)
+                    (navigate(`/project/${project.id}`))
                   }
                   className="project-list-item-text subtitle"
                 >

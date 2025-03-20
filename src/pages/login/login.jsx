@@ -8,8 +8,10 @@ import { LockOpenOutlined } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import AppleSignin from "react-apple-signin-auth";
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
   const handleLogin = (event) => {
     event.preventDefault();
     const email = document.getElementById("email").value;
@@ -34,7 +36,7 @@ const Login = () => {
         } else if (data.token) {
           localStorage.setItem("token", data.token);
           alert("Login successful");
-          window.location.href = "/";
+          navigate("/home");
         }
       })
       .catch((error) => {
@@ -73,7 +75,7 @@ const Login = () => {
                 } else if (data.token) {
                   localStorage.setItem("token", data.token);
                   alert("Login successful");
-                  window.location.href = "/";
+                  navigate("/home");
                 }
               })
               .catch((error) => {

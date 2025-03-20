@@ -5,6 +5,8 @@ import googleLogo from "../../assets/google.png";
 import appleLogo from "../../assets/apple-logo.png";
 import appLogo from "../../assets/app_logo.png";
 import { EmailOutlined } from "@mui/icons-material";
+import { useNavigate } from 'react-router-dom';
+
 // import {
 //   EmailOutline,
 //   Lock,
@@ -14,6 +16,7 @@ import { EmailOutlined } from "@mui/icons-material";
 // } from "mdi-material-ui";
 
 const ForgetPassword = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -87,7 +90,7 @@ const ForgetPassword = () => {
                   console.log(data);
                   if (data.status === true) {
                     alert(data.message);
-                    window.location.href = "/otpScreen";
+                    navigate("/otpScreen");
                   } else {
                     alert(data.message);
                   }

@@ -5,10 +5,12 @@ import googleLogo from "../../assets/google.png";
 import appleLogo from "../../assets/apple-logo.png";
 import appLogo from "../../assets/app_logo.png";
 import { EmailOutlined } from "@mui/icons-material";
-
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+
 
 const GetStartNow = () => {
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -75,7 +77,7 @@ const GetStartNow = () => {
                 if (response.ok) {
                   const data = await response.json();
                   if (data.status === true) {
-                    window.location.href = "/checkEmail";
+                    navigate("/checkEmail");
                     alert("OTP has been sent to your Email");
                   } else {
                     alert(data.message);

@@ -7,7 +7,7 @@
     width: 300px;
     background-color: #41075c;
     color: white;
-    border-top-left-radius: 20px;
+    /* border-top-left-radius: 20px; */
     padding: 20px;
   }
   
@@ -53,7 +53,7 @@
   .upgrade-button {
     background-color: #fec000;
     color: white;
-    padding: 10px 35px;
+    padding: 10px 45px;
     border-radius: 20px;
     cursor: pointer;
     font-weight: 500;
@@ -105,6 +105,8 @@
     align-items: center;
     display: flex;
     gap: 10px;
+    text-decoration: none;
+
   }
   
   .nav-item.active {
@@ -112,11 +114,13 @@
     border-radius: 10px;
     color: #41075c;
     font-weight: 600;
+  text-decoration: none;
+
   }
   
   .project-area {
     margin-top: 10px;
-    padding: 10px;
+    padding: 1px;
     border-radius: 10px;
   }
   
@@ -150,10 +154,9 @@
   /* ... (Style the table/list elements) */
   .project-list {
     list-style: none;
-    /* remove bullet points */
     padding: 15px;
     margin-top: 20px;
-    width: 100%;
+    padding-right: 0px;
     border-collapse: collapse;
     /* for table-like layout if needed */
     border-radius: 20px;

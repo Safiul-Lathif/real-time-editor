@@ -7,7 +7,7 @@
   width: 300px;
   background-color: #41075c;
   color: white;
-  border-top-left-radius: 20px;
+  /* border-top-left-radius: 20px; */
   padding: 20px;
 }
 
@@ -104,6 +104,7 @@
   align-items: center;
   display: flex;
   gap: 10px;
+  text-decoration: none;
 }
 
 .nav-item.active {
@@ -111,6 +112,8 @@
   border-radius: 10px;
   color: #41075c;
   font-weight: 600;
+  text-decoration: none;
+
 }
 
 .project-area {
