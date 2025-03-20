@@ -75,7 +75,7 @@ const Login = () => {
                 } else if (data.token) {
                   localStorage.setItem("token", data.token);
                   alert("Login successful");
-                  navigate("/");
+                  navigate("/home");
                 }
               })
               .catch((error) => {

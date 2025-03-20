@@ -1,5 +1,9 @@
 import {
   AccountBoxTwoTone,
+  CalendarMonth,
+  CalendarMonthOutlined,
+  CalendarTodayOutlined,
+  CalendarTodayRounded,
   CardGiftcard,
   GifTwoTone,
   Inventory,
@@ -8,30 +12,40 @@ import {
 import { Box } from "@mui/material";
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from 'react-router-dom';
+import calenderIcon from "../../assets/calendar-line.png";
 
 const PlanSection = () => {
+  const navigate = useNavigate();
   return (
     <Container>
-      <PlanCard>
+      <Card>
         <CardHeader>
           <div>
-            Your Plan
-            <PlanName>Free</PlanName>
+            Purchased Credits
+            <PlanName>03</PlanName>
           </div>
           <CrownContainer>
             <GifTwoTone />
           </CrownContainer>
         </CardHeader>
         <Validity>
-          <CalendarIcon />
-          Valid for 14 days
+          <img
+            src={calenderIcon}
+            alt="Calender Icon"
+            style={{
+              width: "20px",
+              height: "20px",
+              filter: "invert(56%) sepia(23%) saturate(4361%) hue-rotate(174deg) brightness(104%) contrast(87%)", /* Cyan */
+            }} />
+          --
         </Validity>
-      </PlanCard>
+      </Card>
 
-      <CreditCard>
+      <Card>
         <CardHeader>
           <div>
-            Available Credits
+            Consumed Credits
             <PlanName>02</PlanName>
           </div>
           <CrownContainer>
@@ -39,15 +53,21 @@ const PlanSection = () => {
           </CrownContainer>
         </CardHeader>
         <Validity>
-          <CalendarIcon />
-          Valid for 14 days
+          <img
+            src={calenderIcon}
+            alt="Calender Icon"
+            style={{
+              width: "20px",
+              height: "20px",
+              filter: "invert(56%) sepia(23%) saturate(4361%) hue-rotate(174deg) brightness(104%) contrast(87%)", /* Cyan */
+            }} />
+          --
         </Validity>
-      </CreditCard>
-
-      <ConsumeCard>
+      </Card>
+      <Card>
         <CardHeader>
           <div>
-            Consumed Credits
+            Available Credits
             <PlanName>01</PlanName>
           </div>
           <CrownContainer>
@@ -55,10 +75,28 @@ const PlanSection = () => {
           </CrownContainer>
         </CardHeader>
         <Validity>
-          <CalendarIcon />
-          Valid for 14 days
+          <img
+            src={calenderIcon}
+            alt="Calender Icon"
+            style={{
+              width: "20px",
+              height: "20px",
+              filter: "invert(56%) sepia(23%) saturate(4361%) hue-rotate(174deg) brightness(104%) contrast(87%)", /* Cyan */
+            }} />
+          Unlimited Validity
         </Validity>
-      </ConsumeCard>
+      </Card>
+      <Credits>
+        Do you want more credits?
+        <button
+          className="upgrade-button"
+          onClick={() => {
+            navigate("/researchPickPricing");
+          }}
+        >
+          Purchase
+        </button>
+      </Credits>
     </Container>
   );
 };
@@ -69,7 +107,9 @@ const Container = styled.div`
   flex-wrap: wrap;
   justify-content: flex-start;
   gap: 16px;
-  padding: 20px;
+  padding-bottom: 20px;
+  padding-top: 10px;
+
 `;
 const CrownContainer = styled.div`
   display: flex;
@@ -83,28 +123,22 @@ const CrownContainer = styled.div`
 `;
 
 const Card = styled.div`
-  background: #f8f9fa; // Light grey background
-  border-radius: 8px;
+  background: white; // Light grey background
+  border-radius: 20px;
   padding: 20px;
-  width: 200px; // Adjust as needed
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  width: 220px; // Adjust as needed
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0);
+  text-align: start;
 `;
 
-const PlanCard = styled(Card)`
-  /* Add specific styles for the plan card */
-  text-align: left;
+const Credits = styled(Card)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 `;
 
-const CreditCard = styled(Card)`
-  /* Add specific styles for the credit card */
-  text-align: left;
-`;
-
-const ConsumeCard = styled(Card)`
-  /* Add specific styles for the consume card */
-  text-align: left;
-`;
 
 const CardHeader = styled.div`
   display: flex;
@@ -117,7 +151,8 @@ const CardHeader = styled.div`
 const PlanName = styled.div`
   font-size: 24px;
   font-weight: bold;
-  margin-top: 5px;
+  margin-top: 20px;
+  margin-bottom: 15px;
   align-items: start;
 `;
 
@@ -136,6 +171,7 @@ const ConsumeCount = styled.div`
 const Validity = styled.div`
   display: flex;
   align-items: end;
+  gap: 5px;
   justify-content: start;
   color: #6c757d; // Grey color
 `;

@@ -51,7 +51,7 @@
     background-color: #f4f4f4;
   }
   h1{
-    color: rgb(65, 2, 65);
+    color: #42015F;
   }
   
   .page-title {
@@ -88,7 +88,7 @@
     padding: 20px;
     text-align: left;
     position: relative; 
-    color: rgb(65, 2, 65);
+    color: #42015F;
     letter-spacing: 0.5px;
   }
 
@@ -106,7 +106,7 @@
     padding: 20px;
     text-align: left;
     position: relative; 
-    background-color: rgb(65, 2, 65);
+    background-color: #42015F;
     letter-spacing: 0.8px;
     transform: scale(1.05);
   }
@@ -142,7 +142,7 @@
   }
 
   .save-badge {
-    color: rgb(65, 2, 65);
+    color: #42015F;
     background-color: white;
     padding: 5px 10px;
     border-radius: 4px;
@@ -153,7 +153,7 @@
   }
   
   .buy-button, .current-plan-button, .contact-button {
-    background-color: rgb(91, 3, 91);
+    background-color: #42015F;
     color: white;
     padding: 15px 20px;
     border: none;
@@ -162,10 +162,6 @@
     font-weight: bold;
     font-size: 15px;
     width: 100%;
-  }
-  
-  .current-plan-button {
-    background-color: #6c757d;
   }
   
   .buy-button.active{

@@ -9,6 +9,7 @@ function ResearchPickPricing() {
   const [packageDetails, setPackageDetails] = useState([]);
   const [showPayPal, setShowPayPal] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
+  const [packageId, setPackageId] = useState(null);
   useEffect(() => {
     const fetchPackageDetails = async () => {
       const token = localStorage.getItem("token");
@@ -35,10 +36,12 @@ function ResearchPickPricing() {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "rgb(91, 3, 91)" }}>
+    <div >
       <div>
         <Header />
-        <div className="page-title">ResearchPick plans and pricing</div>
+        <div style={{ position: "absolute", top: 120, left: 0, width: "100%", color: "white" }}>
+          ResearchPick plans and pricing
+        </div>
       </div>
       <div className="pricing-page">
         <div className="intro">
@@ -136,11 +139,14 @@ function ResearchPickPricing() {
                     {
                       (showPayPal && selectedPackage === packageDetail.package_name) ?
 
-                        (<PayPalCheckout amount={`${packageDetail.amount}`} />) : (<button
+                        (<PayPalCheckout amount={`${packageDetail.amount}`} package_id={packageDetail.package_id} />) : (<button
                           className={`buy-button ${packageDetail.package_name
                             .toLowerCase()
                             .replace(/\s/g, "-") === "super-pro" ? "active" : ""} `}
-                          onClick={() => { setShowPayPal(true); setSelectedPackage(packageDetail.package_name) }}
+                          onClick={() => {
+                            setShowPayPal(true);
+                            setSelectedPackage(packageDetail.package_name);
+                          }}
                         >
                           Buy
                         </button>)}

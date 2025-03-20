@@ -5,3 +5,14 @@
     height: 110vh;
     width: 320px;
   }
+
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 230px;
+    text-align: center;
+    padding: 10px 0;
+    background-color: #41075c;
+    color: white;
+  }

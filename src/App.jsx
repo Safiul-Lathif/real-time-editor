@@ -16,6 +16,7 @@ import Success from "./pages/Succes.jsx";
 import Credits from "./pages/credits/Credits.jsx";
 import ResearchPickPricing from "./pages/researchPickPricings/ResearchPickPrices.jsx";
 import OtpScreen from "./pages/otpScreen/OtpScreen.jsx";
+import EditorPage from "./pages/editor/editor.jsx";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             }
           />
           <Route path="/credits" element={<Credits />} />
+          {/* <Route path="/editor" element={<EditorPage />} /> */}
           <Route path="/editProfile" element={<EditProfileScreen />} />
           <Route
             path="/researchPickPricing"
@@ -45,7 +47,7 @@ function App() {
           <Route path="/register" element={<SignUp />} />
           <Route path="/getStartNow" element={<GetStartNow />} />
           <Route path="/forgetPassword" element={<ForgetPassword />} />
-          <Route path="/project/:id" element={<Home />} />
+          <Route path="/project/:id" element={<EditorPage />} />
           <Route
             path="/trackChanges"
             element={<EditorWithHighlightedChanges />}

@@ -5,37 +5,38 @@ import appLogo from "../../assets/app_logo.png";
 import { Link } from "react-router-dom";
 import { uc } from "../../api/UserController";
 import { useNavigate } from 'react-router-dom';
-// --- Components ---
-const Header = ({ navigate }) => (
+import Header from "../../components/header/Header";
+// // --- Components ---
+// const Header = ({ navigate }) => (
 
-  <HeaderContainer>
-    <img
-      src={appLogo}
-      alt="Research Pick Logo"
-      style={{
-        width: 240,
-        height: 70,
-      }}
-    />
-    <RightContent>
-      <ProjectDropdown
-        onClick={() => {
-          navigate("/");
-        }}
-      >
-        Project
-      </ProjectDropdown>
-      <LogoutButton
-        onClick={() => {
-          localStorage.clear();
-          navigate("/");
-        }}
-      >
-        Logout
-      </LogoutButton>
-    </RightContent>
-  </HeaderContainer>
-);
+//   <HeaderContainer>
+//     <img
+//       src={appLogo}
+//       alt="Research Pick Logo"
+//       style={{
+//         width: 240,
+//         height: 70,
+//       }}
+//     />
+//     <RightContent>
+//       <ProjectDropdown
+//         onClick={() => {
+//           navigate("/");
+//         }}
+//       >
+//         Project
+//       </ProjectDropdown>
+//       <LogoutButton
+//         onClick={() => {
+//           localStorage.clear();
+//           navigate("/");
+//         }}
+//       >
+//         Logout
+//       </LogoutButton>
+//     </RightContent>
+//   </HeaderContainer>
+// );
 
 const ProfileCard = ({ name, email, lastUpdate, profileImage, navigate }) => (
   <CardContainer
@@ -83,12 +84,18 @@ const LinkedAccounts = () => (
   <LinkedAccountsContainer>
     <SectionTitle>Linked Accounts</SectionTitle>
     <GoogleLink>
-      <GoogleIcon
-        src={"https://img.icons8.com/color/48/000000/google-logo.png"}
-        alt="Google"
-      />{" "}
-      {/* Replace with actual path */}
-      <GoogleText>Google</GoogleText>
+      <div style={{ display: "flex" }}>
+        <GoogleIcon
+          src={"https://img.icons8.com/color/48/000000/google-logo.png"}
+          alt="Google"
+        />
+        <div style={{
+          justifyItems: "start",
+        }}>
+          <GoogleText>Google</GoogleText>
+          <p>Log in with google</p>
+        </div>
+      </div>
       <UnlinkButton>Unlink</UnlinkButton>
     </GoogleLink>
   </LinkedAccountsContainer>
@@ -132,16 +139,22 @@ const ProfileScreen = () => {
 
   return (
     <PageContainer>
-      <Header navigate={navigate} />
-      <ContentContainer>
-        <ProfileCard
-          name={userData.name}
-          email={userData.email}
-          lastUpdate={userData.lastUpdate}
-          profileImage={userData.profileImage}
-          navigate={navigate}
-        />
+      <div>
+        <Header />
+        <div
+          style={{ justifyItems: "center", position: "absolute", top: 120, width: "100%" }}
+        >
+          <ProfileCard
+            name={userData.name}
+            email={userData.email}
+            lastUpdate={userData.lastUpdate}
+            profileImage={userData.profileImage}
+            navigate={navigate}
+          />
+        </div>
 
+      </div>
+      <ContentContainer>
         <TwoColumns>
           <DetailsSection title="Personal Information">
             <DetailItem label="Full Name" value={userData.name} />
@@ -269,6 +282,7 @@ const ContentContainer = styled.div`
   padding: 20px;
   max-width: 960px; /* Example */
   margin: 0 auto;
+  padding-top: 100px;
   flex: 1; /* Makes the content expand to fill available space */
 `;
 
@@ -277,16 +291,18 @@ const CardContainer = styled.div`
   padding: 15px 20px;
   border-radius: 20px;
   display: flex;
+  width: 920px;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
-  background-color: rgba(255, 255, 255, 0.8);
-`;
+  background-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
+  backdrop-filter: blur(10px);`;
 
 const ProfileImage = styled.img`
   width: 75px;
   height: 75px;
-  border-radius: 20%;
+  border-radius: 50%;
   margin-right: 20px;
 `;
 
@@ -321,7 +337,7 @@ const DetailsContainer = styled.div`
   background-color: #fff;
   padding: 20px;
   border-radius: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
   flex: 1; /* Distribute columns equally */
   width: 500px;
 `;
@@ -349,7 +365,7 @@ const Label = styled.dt`
 
 const Value = styled.dd`
   margin: 0;
-  flex: 1;
+  // flex: 1;
   font-weight: 500;
   font-size: 14px;
   color: darkGray;
@@ -359,13 +375,14 @@ const LinkedAccountsContainer = styled.div`
   background-color: #fff;
   padding: 30px;
   border-radius: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
   margin-bottom: 20px;
+  
 `;
 
 const GoogleLink = styled.div`
   display: flex;
-  align-items: center;
+  justify-content: space-between;
 `;
 
 const GoogleIcon = styled.img`
@@ -378,7 +395,6 @@ const GoogleIcon = styled.img`
 `;
 
 const GoogleText = styled.span`
-  flex: 1;
   font-weight: 600;
 `;
 

@@ -1,20 +1,9 @@
 "use client";
-import React, { useState } from "react";
-import appLogo from "../../assets/app_logo.png";
+import React, { useState, useEffect } from "react";
 import "./credits.css"; // Import your CSS file
-import SettingsIcon from "@mui/icons-material/Settings";
-import {
-  ContactMail,
-  Delete,
-  Downloading,
-  FileDownload,
-  FileDownloadOff,
-  NotificationAdd,
-  PlusOne,
-  Search,
-} from "@mui/icons-material";
 import SideBar from "../../components/sideBar/SideBar";
 import PlanSection from "../../components/cards/planSectionCard";
+import { TopBar } from "../../components/topBar/TopBar";
 const projectsData = [
   // Sample project data (replace with your actual data)
   {
@@ -57,43 +46,39 @@ const Credits = () => {
   filteredProjects = filteredProjects.filter(
     (project) => project.filterType === filterBy || filterBy === "all"
   );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://pocapi.researchpick.com/api/creditsDashboard", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
 
   return (
-    <div className="container">
+    <div style={{
+      display: "flex",
+      height: "100%",
+    }}>
       <SideBar />
-      <div className="content">
-        <header className="header">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              gap: "10px",
-            }}
-          >
-            <img
-              src="https://media.licdn.com/dms/image/v2/C4D03AQFdX9FHzdCSYg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1646324063549?e=1744243200&v=beta&t=0fWXGZOdxmZ8Xh255N5WSQB6jrfjGpS4i0dpX2sn2lE"
-              alt="User Avatar"
-              className="avatar"
-            />
-            <span className="user-name">Safiul Lathif</span>
-          </div>
-          <div
-            style={{
-              height: "45px",
-              width: "45px",
-              borderRadius: "50%",
-              backgroundColor: "white",
-              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.5)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <NotificationAdd />
-          </div>
-        </header>
-
+      <div style={{
+        width: "100%",
+        padding: "20px 30px",
+        backgroundColor: "#f0f0f0",
+      }}>
+        <TopBar />
         <div className="project-area">
           <div
             style={{
@@ -113,7 +98,7 @@ const Credits = () => {
               color: "#41075c",
             }}
           >
-            Your Purchases
+            Purchases / Utilization Log
           </p>
           <ul className="project-list">
             <li className="project-list-header">
@@ -130,10 +115,10 @@ const Credits = () => {
                   );
                 }}
               />
-              <div className="project-list-header-item subtitle">Invoice</div>
+              <div className="project-list-header-item subtitle">Title</div>
               <div className="project-list-header-item">Amount</div>
               <div className="project-list-header-item">Date</div>
-              <div className="project-list-header-item">Status</div>
+              <div className="project-list-header-item">Type</div>
               <div className="project-list-header-item">Actions</div>
             </li>
             {filteredProjects.map((project, index) => (

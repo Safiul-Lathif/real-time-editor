@@ -316,24 +316,6 @@ const Home = () => {
   return (
     <div className={styles.container}>
       <div id="editor" className={styles.editor}></div>
-      <button onClick={save} className={styles.saveButton}>
-        {isEdit ? "Edit" : "Save"}
-      </button>
-      {/* <button onClick={saveWithChanges} className={styles.saveButton}>
-        {isEdit ? "Edit with changes" : "Save"}
-      </button> */}
-      <button
-        onClick={download}
-        disabled={isSaving}
-        className={styles.saveButton}
-      >
-        {isSaving ? "Downloading..." : "Download"}
-      </button>
-      {saveStatus && (
-        <div className={`${styles.saveStatus} ${styles[saveStatus.type]}`}>
-          {saveStatus.message}
-        </div>
-      )}
     </div>
   );
 };
