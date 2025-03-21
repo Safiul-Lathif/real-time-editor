@@ -209,7 +209,7 @@ const ProfileScreen = () => {
         >
           <span>Need to Leave? </span>
           <Link
-            to="/register"
+            to="/"
             style={{
               color: "red",
             }}

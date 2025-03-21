@@ -3,14 +3,14 @@
     color: white;
     padding: 20px;
     height: 110vh;
-    width: 320px;
+    width: 350px;
   }
 
   .footer {
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 230px;
+    width: 280px;
     text-align: center;
     padding: 10px 0;
     background-color: #41075c;

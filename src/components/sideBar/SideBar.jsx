@@ -25,7 +25,7 @@ const SideBar = () => {
         <div
           className={`nav-item ${window.location.pathname === "/" ? "active" : ""
             }`}
-          onClick={() => (navigate("/"))}
+          onClick={() => (navigate("/home"))}
         >
           <ContactMail />
           Projects
@@ -57,7 +57,7 @@ const SideBar = () => {
           <LogoutButton
             onClick={() => {
               localStorage.clear();
-              navigate("/logout");
+              navigate("/login");
             }}
           >
             <div style={{

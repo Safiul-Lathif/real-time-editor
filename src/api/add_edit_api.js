@@ -1,6 +1,6 @@
-export default async function handler({ newPost, isEdit, id, title }) {
-  let token = localStorage.getItem("token");
 
+export default async function handler({ newPost, isEdit, id, title, navigate }) {
+  let token = localStorage.getItem("token");
   let data = {
     title: title,
     content: JSON.stringify(newPost),
@@ -27,6 +27,7 @@ export default async function handler({ newPost, isEdit, id, title }) {
 
   if (response.ok) {
     alert(isEdit ? "Edited Successfully" : "Added Success");
+    navigate("/");
   } else {
     console.error("Error:", response.statusText);
   }
