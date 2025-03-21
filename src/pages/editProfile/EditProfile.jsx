@@ -4,30 +4,13 @@ import styles from "./editProfile.module.css"; // Import CSS module
 import { React, useState, useEffect } from "react";
 import { SelectImage } from "../../components/SelectImage";
 import { uc } from "../../api/UserController";
+import Header from "../../components/header/Header";
+import { useNavigate } from "react-router-dom";
 
-// --- Components ---
-const Header = () => (
-  <HeaderContainer>
-    <img
-      src={appLogo}
-      alt="Research Pick Logo"
-      style={{
-        width: 240,
-        height: 70,
-      }}
-    />
-    <RightContent>
-      <ProjectDropdown>Project</ProjectDropdown>
-      <LogoutButton>Logout</LogoutButton>
-    </RightContent>
-  </HeaderContainer>
-);
 
-const EditProfile = ({ userData, timeZoneList, countries }) => (
+const EditProfile = ({ userData, timeZoneList, countries, navigate, handleUpdateCountry, handleUpdateTimeZone }) => (
   <div className={styles.container}>
     <div className={styles.form}>
-      <SectionTitle>Edit Profile</SectionTitle>
-
       <form id="editForm" className={styles.forms}>
         <SelectImage userData={userData} />
         <div className={styles.formGroup}>
@@ -62,7 +45,7 @@ const EditProfile = ({ userData, timeZoneList, countries }) => (
               type="number"
               id="mobileNumber"
               placeholder="Enter mobile number"
-              required
+
               defaultValue={userData.initialMobileNumber}
             />
           </div>
@@ -74,7 +57,7 @@ const EditProfile = ({ userData, timeZoneList, countries }) => (
               type="name"
               id="universityName"
               placeholder="Enter university name"
-              required
+
               defaultValue={userData.initialUniversityName}
             />
           </div>
@@ -86,7 +69,7 @@ const EditProfile = ({ userData, timeZoneList, countries }) => (
               type="name"
               id="department"
               placeholder="Enter department"
-              required
+
               defaultValue={userData.initialDepartment}
             />
           </div>
@@ -98,7 +81,7 @@ const EditProfile = ({ userData, timeZoneList, countries }) => (
               type="name"
               id="speciality"
               placeholder="Enter speciality"
-              required
+
               defaultValue={userData.initialSpeciality}
             />
           </div>
@@ -110,7 +93,6 @@ const EditProfile = ({ userData, timeZoneList, countries }) => (
               type="name"
               id="location"
               placeholder="Enter location"
-              required
               defaultValue={userData.initialLocation}
             />
           </div>
@@ -120,16 +102,8 @@ const EditProfile = ({ userData, timeZoneList, countries }) => (
           <div className={styles.wrapper}>
             <select
               id="country"
-              required
-              defaultValue={userData.initialCountry}
-              onChange={(e) => {
-                const countryName = e.target.value;
-                console.log(countryName);
-                const country = countries.find(
-                  (country) => country.CountryName === countryName
-                ).CountryID;
-                userData.initialCountry = country;
-              }}
+              value={userData.initialCountry}
+              onChange={handleUpdateCountry}
             >
               <option value="">Select country</option>
               {countries.map((country, index) => (
@@ -145,12 +119,8 @@ const EditProfile = ({ userData, timeZoneList, countries }) => (
           <div className={styles.wrapper}>
             <select
               id="timezone"
-              required
-              defaultValue={userData.initialTimezone}
-              onChange={(e) => {
-                const timeZone = e.target.value;
-                userData.initialTimezone = timeZone;
-              }}
+              value={userData.initialTimezone}
+              onChange={handleUpdateTimeZone}
             >
               <option value="">Select timezone</option>
               {timeZoneList.map((timezone, index) => (
@@ -165,6 +135,8 @@ const EditProfile = ({ userData, timeZoneList, countries }) => (
           style={{
             display: "flex",
             gap: "20px",
+            justifyContent: "center",
+            marginTop: "20px",
           }}
         >
           <button
@@ -182,19 +154,31 @@ const EditProfile = ({ userData, timeZoneList, countries }) => (
           </button>
           <button
             onClick={(e) => {
+              const firstName = document.getElementById("firstName").value;
+              const lastName = document.getElementById("lastName").value;
+              let country = '';
+              if (firstName.length === 0 || lastName.length === 0) {
+                alert("Please fill in all fields");
+                return;
+              }
               const token = localStorage.getItem("token");
               e.preventDefault();
-
+              try {
+                country = countries.find((e) => e.CountryName == userData.initialCountry).CountryID ?? userData.initialCountry;
+              } catch (error) {
+                country = userData.initialCountry;
+              }
+              console.log(country);
               const body = JSON.stringify({
-                first_name: document.getElementById("firstName").value,
-                last_name: document.getElementById("lastName").value,
+                first_name: firstName,
+                last_name: lastName,
                 university_name:
                   document.getElementById("universityName").value,
                 department: document.getElementById("department").value,
                 speciality: document.getElementById("speciality").value,
                 location: document.getElementById("location").value,
                 mobile_no: document.getElementById("mobileNumber").value,
-                country: userData.initialCountry,
+                country: country,
                 user_timezone: userData.initialTimezone,
                 id: userData.userId,
                 profile_image: userData.profileImage,
@@ -215,6 +199,7 @@ const EditProfile = ({ userData, timeZoneList, countries }) => (
                   console.log("Edited successful:", data);
                   if (data.status === true) {
                     alert(data.message);
+                    navigate("/profile");
                   } else {
                     alert(data.message);
                   }
@@ -250,6 +235,7 @@ const EditProfileScreen = () => {
     initialTimezone: "",
     profileImage: "",
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -285,6 +271,7 @@ const EditProfileScreen = () => {
               : "https://th.bing.com/th/id/OIP.hGSCbXlcOjL_9mmzerqAbQHaHa?rs=1&pid=ImgDetMain",
           };
           setUserDetails(user);
+          console.log(user);
         }
       } catch (error) {
         console.error("Error fetching user details:", error);
@@ -302,15 +289,31 @@ const EditProfileScreen = () => {
     fetchCountries();
     fetchUserDetails();
   }, []);
+  const handleUpdateCountry = (e) => {
+    const countryName = e.target.value;
+    setUserDetails({ ...userData, initialCountry: countryName });
+  }
+  const handleUpdateTimeZone = (e) => {
+    const timezone = e.target.value;
+    console.log(timezone);
 
+    setUserDetails({ ...userData, initialTimezone: timezone });
+  }
   return (
     <PageContainer>
       <Header />
-      <EditProfile
-        userData={userData}
-        timeZoneList={timeZoneList}
-        countries={countries}
-      />
+      <div
+        style={{ justifyItems: "center", position: "absolute", top: 120, width: "100%" }}
+      >
+        <EditProfile
+          userData={userData}
+          timeZoneList={timeZoneList}
+          countries={countries}
+          navigate={navigate}
+          handleUpdateCountry={handleUpdateCountry}
+          handleUpdateTimeZone={handleUpdateTimeZone}
+        />
+      </div>
     </PageContainer>
   );
 };
@@ -321,7 +324,6 @@ export default EditProfileScreen;
 const PageContainer = styled.div`
   font-family: sans-serif; /* Example */
   background-color: #f7f9fa; /* Example */
-  display: flex;
   flex-direction: column;
   min-height: 100vh;
   align-items: center;

@@ -6,46 +6,25 @@ import PlanSection from "../../components/cards/planSectionCard";
 import { TopBar } from "../../components/topBar/TopBar";
 const projectsData = [
   // Sample project data (replace with your actual data)
-  {
-    id: 1,
-    invoice: "invoice#0021 - jan 2025",
-    amount: "$100",
-    date: "jan 01, 2025",
-    status: "Success",
-    action: "download",
-    checkbox: false,
-  },
-  {
-    id: 2,
-    invoice: "invoice#0021 - jan 2025",
-    amount: "$100",
-    date: "jan 01, 2025",
-    status: "Success",
-    action: "download",
-    checkbox: false,
-  },
-  {
-    id: 3,
-    invoice: "invoice#0021 - jan 2025",
-    amount: "$100",
-    date: "jan 01, 2025",
-    status: "Success",
-    action: "download",
-    checkbox: false,
-  },
+
 ];
 
 const Credits = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterBy, setFilterBy] = useState("all");
   const [projects, setProjects] = useState(projectsData); // Initialize projects with data
-
   let filteredProjects = projects.filter((project) =>
     project.invoice.toLowerCase().includes(searchTerm.toLowerCase())
   );
   filteredProjects = filteredProjects.filter(
     (project) => project.filterType === filterBy || filterBy === "all"
   );
+  const [credits, setCredits] = useState({
+    active_plan: "",
+    available_credits: 0,
+    consumed_credits: 0,
+    purchase: []
+  });
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -57,12 +36,21 @@ const Credits = () => {
           },
         });
         const data = await response.json();
-        console.log(data);
+        console.log(data.data);
+        setCredits(data.data);
+        setProjects(data.data.purchase.map((purchase, index) => ({
+          id: index,
+          invoice: purchase.title,
+          amount: ` $${purchase.amount}`,
+          paidDate: purchase.paid_date,
+          status: purchase.status,
+          expireDate: purchase.expire_date,
+          checkbox: false,
+        })));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
   }, []);
 
@@ -88,7 +76,7 @@ const Credits = () => {
               marginBottom: "10px",
             }}
           ></div>
-          <PlanSection />
+          <PlanSection credits={credits} />
           <p
             style={{
               textAlign: "start",
@@ -140,9 +128,9 @@ const Credits = () => {
                   {project.invoice}
                 </div>
                 <div className="project-list-item-text">{project.amount}</div>
-                <div className="project-list-item-text">{project.date}</div>
+                <div className="project-list-item-text">{project.paidDate}</div>
                 <div className="project-list-item-text">{project.status}</div>
-                <div className="project-list-item-text">{project.action}</div>
+                <div className="project-list-item-text">Download</div>
               </li>
             ))}
           </ul>

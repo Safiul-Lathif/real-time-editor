@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './editor.css';
 import bgImage from "../../assets/profile-bg.png";
 import appLogo from "../../assets/app_logo_with_bg.png";
@@ -8,10 +8,47 @@ import submit from "../../assets/submit.png";
 import chat from "../../assets/chat.png";
 import HorizontalDivider from '../../components/divider';
 import Home from "../../pages/index";
+import Handler from '../../api/add_edit_api';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 
 function EditorPage() {
-    const [mode, setMode] = useState(0)
+    const navigate = useNavigate();
+    const [mode, setMode] = useState(0);
+    const [isEdit, setIsEdit] = useState(true);
+    const ref = useRef(null);
+    const { id } = useParams();
+
+    const handleSubmit = async () => {
+        if (ref.current) {
+            let savedData = await ref.current.save();
+            let map = {
+                time: savedData.time,
+                blocks: savedData.blocks,
+                version: savedData.version,
+            };
+            try {
+                const firstBlock = map.blocks[0];
+                const title = firstBlock.data.text ? firstBlock.data.text : "";
+                Handler({ newPost: map, isEdit: isEdit, id: id, title: title, navigate: navigate });
+            } catch (error) {
+                console.error("error  data:", error);
+            }
+        }
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (id === "new") {
+                setIsEdit(false);
+            } else {
+                setIsEdit(true);
+            }
+        };
+        fetchData();
+    }, [id, isEdit]);
+
     return (
         <div className="research-pick-container">
             <div style={{
@@ -49,9 +86,11 @@ function EditorPage() {
                         paddingRight: "10px"
                     }}>
                         <HorizontalDivider />
-                        <img src={home} alt="home" style={{
-                            filter: "brightness(0) saturate(100%) invert(100%)", /* White */
-                        }} />
+                        <img
+                            onClick={() => navigate("/")}
+                            src={home} alt="home" style={{
+                                filter: "brightness(0) saturate(100%) invert(100%)", /* White */
+                            }} />
                         <HorizontalDivider />
                     </div>
                     <div style={{
@@ -106,12 +145,14 @@ function EditorPage() {
                         alt="share" /> Share</button>
                     <HorizontalDivider />
 
-                    <button className="top-button"><img src={submit}
-                        style={{
-                            filter: "brightness(0) saturate(100%) invert(100%)",
-                            height: '25px',
-                        }}
-                        alt="submit" /> Submit</button>
+                    <button
+                        onClick={handleSubmit}
+                        className="top-button"><img src={submit}
+                            style={{
+                                filter: "brightness(0) saturate(100%) invert(100%)",
+                                height: '25px',
+                            }}
+                            alt="submit" /> Submit</button>
                     <HorizontalDivider />
 
                     <button className="top-button"><img src={chat}
@@ -135,7 +176,7 @@ function EditorPage() {
                     <div className="left-sidebar">
                     </div>
                     <div className="main-content">
-                        <Home />
+                        <Home ref={ref} />
                     </div>
                     <div className="right-sidebar">
                     </div>

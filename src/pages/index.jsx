@@ -10,14 +10,13 @@ import Code from "@editorjs/code";
 import InlineCode from "@editorjs/inline-code";
 import client from "../api/client";
 import { io } from "socket.io-client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import Handler from "../api/add_edit_api";
 import styles from "../styles.module.css";
 import { useParams } from "react-router-dom";
 import { diffWords } from "diff";
 
-const Home = () => {
-  const ref = useRef(null);
+const Home = ({ ref }) => {
   var currentData = useRef(null);
 
   const [isSaving, setIsSaving] = useState(false);
@@ -70,10 +69,11 @@ const Home = () => {
   let name = firstNames[Math.floor(Math.random() * firstNames.length)];
   let color = colors[Math.floor(Math.random() * colors.length)];
 
-  const socket = io(import.meta.env.VITE_SERVICE_URL);
+  // const socket = io(import.meta.env.VITE_SERVICE_URL);
 
   let socketClient = null;
   const { id } = useParams();
+
 
   const initializeEditor = (storedData) => {
     if (ref.current) return;
@@ -92,62 +92,62 @@ const Home = () => {
         inlineCode: InlineCode,
       },
       onChange: async (api, event) => {
-        if (socketClient.shouldPreventChange) {
-          socketClient.shouldPreventChange = false;
-          return;
-        }
-        switch (event.type) {
-          case "block-changed":
-            editor.save().then((updatedData) => {
-              let newBlock = updatedData.blocks[event.detail.index];
-              let currentBlock = storedData.blocks[event.detail.index];
-              storedData.blocks[event.detail.index] = newBlock;
-              if (!currentBlock) {
-                return socket.emit(
-                  "block-added",
-                  event.detail.index,
-                  name,
-                  newBlock
-                );
-              }
-              if (
-                newBlock.type === currentBlock.type &&
-                newBlock.data === currentBlock.data
-              ) {
-                return;
-              }
-              socket.emit(
-                "block-changed",
-                event.detail.index,
-                name,
-                updatedData.blocks[event.detail.index]
-              );
-            });
-            break;
-          case "block-added":
-            let newBlock = {
-              type: "paragraph",
-              data: {
-                text: "",
-              },
-            };
-            storedData.blocks[event.detail.index] = newBlock;
-            socket.emit("block-added", event.detail.index, name, newBlock);
-            break;
-          case "block-removed":
-            editor.save().then((updatedData) => {
-              storedData.blocks = updatedData.blocks;
-              socket.emit("block-removed", event.detail.index, name);
-            });
-            break;
-        }
-        ref.current.save().then((data) => {
-          handleEditorChange(data, previousData);
-        });
+        // if (socketClient.shouldPreventChange) {
+        //   socketClient.shouldPreventChange = false;
+        //   return;
+        // }
+        // switch (event.type) {
+        //   case "block-changed":
+        //     editor.save().then((updatedData) => {
+        //       let newBlock = updatedData.blocks[event.detail.index];
+        //       let currentBlock = storedData.blocks[event.detail.index];
+        //       storedData.blocks[event.detail.index] = newBlock;
+        //       if (!currentBlock) {
+        //         return socket.emit(
+        //           "block-added",
+        //           event.detail.index,
+        //           name,
+        //           newBlock
+        //         );
+        //       }
+        //       if (
+        //         newBlock.type === currentBlock.type &&
+        //         newBlock.data === currentBlock.data
+        //       ) {
+        //         return;
+        //       }
+        //       socket.emit(
+        //         "block-changed",
+        //         event.detail.index,
+        //         name,
+        //         updatedData.blocks[event.detail.index]
+        //       );
+        //     });
+        //     break;
+        //   case "block-added":
+        //     let newBlock = {
+        //       type: "paragraph",
+        //       data: {
+        //         text: "",
+        //       },
+        //     };
+        //     storedData.blocks[event.detail.index] = newBlock;
+        //     socket.emit("block-added", event.detail.index, name, newBlock);
+        //     break;
+        //   case "block-removed":
+        //     editor.save().then((updatedData) => {
+        //       storedData.blocks = updatedData.blocks;
+        //       socket.emit("block-removed", event.detail.index, name);
+        //     });
+        //     break;
+        // }
+        // ref.current.save().then((data) => {
+        //   handleEditorChange(data, previousData);
+        // });
       },
       onReady: async () => {
         console.log("ready", name);
-        socketClient = client(editor, name, name, color);
+        // socketClient = client(editor, name, name, color);
       },
     });
     ref.current = editor;
@@ -199,23 +199,23 @@ const Home = () => {
     fetchData();
   }, [id, isEdit]);
 
-  const save = async () => {
-    if (ref.current) {
-      let savedData = await ref.current.save();
-      let map = {
-        time: savedData.time,
-        blocks: savedData.blocks,
-        version: savedData.version,
-      };
-      try {
-        const firstBlock = map.blocks[0];
-        const title = firstBlock.data.text ? firstBlock.data.text : "";
-        Handler({ newPost: map, isEdit: isEdit, id: id, title: title });
-      } catch (error) {
-        console.error("error  data:", error);
-      }
-    }
-  };
+  // const save = async () => {
+  //   if (ref.current) {
+  //     let savedData = await ref.current.save();
+  //     let map = {
+  //       time: savedData.time,
+  //       blocks: savedData.blocks,
+  //       version: savedData.version,
+  //     };
+  //     try {
+  //       const firstBlock = map.blocks[0];
+  //       const title = firstBlock.data.text ? firstBlock.data.text : "";
+  //       Handler({ newPost: map, isEdit: isEdit, id: id, title: title });
+  //     } catch (error) {
+  //       console.error("error  data:", error);
+  //     }
+  //   }
+  // };
 
   const saveWithChanges = async () => {
     if (ref.current) {

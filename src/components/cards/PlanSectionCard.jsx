@@ -15,7 +15,7 @@ import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import calenderIcon from "../../assets/calendar-line.png";
 
-const PlanSection = () => {
+const PlanSection = ({ credits }) => {
   const navigate = useNavigate();
   return (
     <Container>
@@ -23,7 +23,7 @@ const PlanSection = () => {
         <CardHeader>
           <div>
             Purchased Credits
-            <PlanName>03</PlanName>
+            <PlanName>{credits.purchase.length}</PlanName>
           </div>
           <CrownContainer>
             <GifTwoTone />
@@ -46,7 +46,7 @@ const PlanSection = () => {
         <CardHeader>
           <div>
             Consumed Credits
-            <PlanName>02</PlanName>
+            <PlanName>{credits.consumed_credits}</PlanName>
           </div>
           <CrownContainer>
             <Inventory />
@@ -68,7 +68,7 @@ const PlanSection = () => {
         <CardHeader>
           <div>
             Available Credits
-            <PlanName>01</PlanName>
+            <PlanName>{credits.available_credits}</PlanName>
           </div>
           <CrownContainer>
             <Refresh />

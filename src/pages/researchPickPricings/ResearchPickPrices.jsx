@@ -168,7 +168,7 @@ function ResearchPickPricing() {
               <button className="contact-button">Contact</button>
             </div>
           </div>
-          <div className="footer">
+          <div className="footerBottom">
             <p>
               All prices displayed are in DOLLAR. Prices may be subject to
               additional VAT, depending on your country.
