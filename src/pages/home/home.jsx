@@ -1,17 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./ResearchPick.css"; // Import your CSS file
-import {
-  Add,
-  Delete,
-  Downloading,
-  FileDownload,
-  FileDownloadOff,
-  Search,
-} from "@mui/icons-material";
+import { Add, CopyAll, Delete, Downloading, Search } from "@mui/icons-material";
 import SideBar from "../../components/sideBar/SideBar";
 import { TopBar } from "../../components/topBar/TopBar";
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
 
 const ResearchPick = () => {
   const navigate = useNavigate();
@@ -77,11 +69,13 @@ const ResearchPick = () => {
       }}
     >
       <SideBar />
-      <div style={{
-        width: "100%",
-        padding: "20px 30px",
-        backgroundColor: "#f0f0f0",
-      }}>
+      <div
+        style={{
+          width: "100%",
+          padding: "20px 30px",
+          backgroundColor: "#f0f0f0",
+        }}
+      >
         <TopBar />
         <div className="project-area">
           <div
@@ -94,39 +88,28 @@ const ResearchPick = () => {
           >
             <div className="project-filters">
               <button
-                className={`filter-button ${filterBy === "all_projects" ? "active" : ""
-                  }`}
+                className={`filter-button ${
+                  filterBy === "all_projects" ? "active" : ""
+                }`}
                 onClick={() => setFilterBy("all_projects")}
               >
                 All Projects
               </button>
               <button
-                className={`filter-button ${filterBy === "owner" ? "active" : ""
-                  }`}
+                className={`filter-button ${
+                  filterBy === "owner" ? "active" : ""
+                }`}
                 onClick={() => setFilterBy("owner")}
               >
                 Your Projects
               </button>
               <button
-                className={`filter-button ${filterBy === "collaborator" ? "active" : ""
-                  }`}
+                className={`filter-button ${
+                  filterBy === "collaborator" ? "active" : ""
+                }`}
                 onClick={() => setFilterBy("collaborator")}
               >
                 Your Collaborations
-              </button>
-              <button
-                className={`filter-button ${filterBy === "archived" ? "active" : ""
-                  }`}
-                onClick={() => setFilterBy("archived")}
-              >
-                Archived Projects
-              </button>
-              <button
-                className={`filter-button ${filterBy === "trashed" ? "active" : ""
-                  }`}
-                onClick={() => setFilterBy("trashed")}
-              >
-                Trashed Projects
               </button>
             </div>
             <div>
@@ -184,7 +167,7 @@ const ResearchPick = () => {
               </div>
               <button
                 className="outlined-button"
-                onClick={() => (navigate("/project/new"))}
+                onClick={() => navigate("/project/new")}
               >
                 <Add style={{ marginRight: "5px" }} />
                 New project
@@ -237,9 +220,7 @@ const ResearchPick = () => {
                   }}
                 />
                 <div
-                  onClick={() =>
-                    (navigate(`/project/${project.id}`))
-                  }
+                  onClick={() => navigate(`/project/${project.id}`)}
                   className="project-list-item-text subtitle"
                 >
                   {project.title}
@@ -250,8 +231,6 @@ const ResearchPick = () => {
                   {project.lastModified}
                 </div>
                 <div className="project-list-item-text action">
-                  <FileDownload />
-                  <FileDownloadOff />
                   <Downloading
                     onClick={async () => {
                       let token = localStorage.getItem("token");
@@ -281,7 +260,7 @@ const ResearchPick = () => {
                       }
                     }}
                   />
-                  <Delete />
+                  <CopyAll />
                 </div>
               </li>
             ))}

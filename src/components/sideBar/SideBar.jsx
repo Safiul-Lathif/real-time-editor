@@ -3,10 +3,10 @@ import { ContactMail } from "@mui/icons-material";
 import appLogo from "../../assets/app_logo_with_bg.png";
 import SettingsIcon from "@mui/icons-material/Settings";
 import "./sideBar.css";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import divider from "../../assets/divider.png";
 import styled from "styled-components";
-import logout from "../../assets/logout.png"
+import logout from "../../assets/logout.png";
 
 const SideBar = () => {
   const navigate = useNavigate();
@@ -23,17 +23,22 @@ const SideBar = () => {
       />{" "}
       <nav className="navigation">
         <div
-          className={`nav-item ${window.location.pathname === "/" ? "active" : ""
-            }`}
-          onClick={() => (navigate("/home"))}
+          className={`nav-item ${
+            window.location.pathname === "/" ||
+            window.location.pathname === "/home"
+              ? "active"
+              : ""
+          }`}
+          onClick={() => navigate("/home")}
         >
           <ContactMail />
           Projects
         </div>
         <div
-          className={`nav-item ${window.location.pathname === "/credits" ? "active" : ""
-            }`}
-          onClick={() => (navigate("/credits"))}
+          className={`nav-item ${
+            window.location.pathname === "/credits" ? "active" : ""
+          }`}
+          onClick={() => navigate("/credits")}
         >
           <ContactMail />
           Credits
@@ -60,16 +65,15 @@ const SideBar = () => {
               navigate("/login");
             }}
           >
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 10
-            }}>
-              <img
-                src={logout}
-                alt="logout"
-              />
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 10,
+              }}
+            >
+              <img src={logout} alt="logout" />
               Logout
             </div>
           </LogoutButton>
