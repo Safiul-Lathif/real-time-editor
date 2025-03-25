@@ -35,6 +35,20 @@
     gap: 10px;
     font-size: 14px;
   }
+  .top-button-active {
+    background-color: transparent;
+    color: purple;
+    border: none;
+    padding: 8px 12px;
+    margin-left: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight:  bold;
+  }
   
   .content-area {
     display: flex;
@@ -53,6 +67,7 @@
     flex-grow: 1;
     background-color: white;
     padding: 20px;
+    width:65%;
     border-radius: 15px;
   }
   
@@ -106,4 +121,58 @@
     text-align: center;
     margin-top: 20px;
     color: #888;
+  }
+  .collaboration-message-container {
+    padding: 10px;
+  }
+  
+  .instructions {
+    color: #777;
+    font-size: 0.9em;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+  
+  .input-container {
+    display: flex;
+    align-items: center;
+    /* border: 1px solid #ccc; */
+    background-color: white;
+    border-radius: 10px;
+    padding: 4px;
+  }
+  
+  .message-input {
+    flex-grow: 1;
+    border: none;
+    padding: 8px;
+    font-size: 1em;
+    outline: none;
+  }
+  
+  .icon-button,
+  .send-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    font-size: 1.1em;
+    color: #555;
+    outline: none;
+  }
+  
+  .send-button {
+    background-color: #2fa1ec;
+    color: white;
+    border-radius: 4px;
+    margin-left: 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+
+  }
+  
+  .send-button svg {
+    margin-left: 8px;
   }

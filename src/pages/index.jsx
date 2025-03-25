@@ -176,7 +176,6 @@ const Home = ({ ref }) => {
           }
         );
         const result = await response.json();
-
         const data = JSON.parse(result["data"]);
         previousData.blocks = data.blocks;
         previousData.version = data.version;

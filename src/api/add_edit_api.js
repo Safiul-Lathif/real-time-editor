@@ -27,7 +27,7 @@ export default async function handler({ newPost, isEdit, id, title, navigate }) 
 
   if (response.ok) {
     alert(isEdit ? "Edited Successfully" : "Added Success");
-    navigate("/");
+    // navigate("/");
   } else {
     console.error("Error:", response.statusText);
   }

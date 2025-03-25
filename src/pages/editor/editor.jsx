@@ -9,16 +9,294 @@ import chat from "../../assets/chat.png";
 import HorizontalDivider from '../../components/divider';
 import Home from "../../pages/index";
 import Handler from '../../api/add_edit_api';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from 'react-router-dom';
+import { Add, AttachEmail, AttachFile } from '@mui/icons-material';
+import bold from "../../assets/editorOptions/Bold.png";
+import italic from "../../assets/editorOptions/italic.png";
+import underline from "../../assets/editorOptions/Underline.png";
+import link from "../../assets/editorOptions/Link.png";
+import image from "../../assets/editorOptions/Image.png";
+import tag from "../../assets/editorOptions/tag_svgrepo.com.png";
+import calculator from "../../assets/editorOptions/math.png";
+import music from "../../assets/editorOptions/omega-square.png";
+import table from "../../assets/editorOptions/insert-table.png";
+import align from "../../assets/editorOptions/align.png";
+import list from "../../assets/editorOptions/List.png";
+import intentLeft from "../../assets/editorOptions/Indent Left.png";
+import intentRight from "../../assets/editorOptions/IndentRight.png";
+import numberList from "../../assets/editorOptions/NumberList.png";
+import undo from "../../assets/editorOptions/Arrow.png";
+import redo from "../../assets/editorOptions/back_line.png";
+import { FaMicrophone, FaPaperPlane, FaSmile } from 'react-icons/fa'; // Import icons
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 
+const Header = ({ mode, setMode, navigate, handleSubmit, isChat, setChat }) => (
+    <div style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        height: 62,
+        display: 'flex',
+        justifyContent: 'space-between',
+        color: 'white',
+        fontSize: 32,
+        fontWeight: 'bold',
+        fontFamily: 'Poppins',
+        cursor: 'pointer',
+        transition: 'all 0.3s ease',
+        borderBottom: '2px solid #fff',
+        top: 0,
+        left: 0,
+        width: '100%',
+        zIndex: 100,
+        boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
+    }}>
+        <div className="left-section">
+            <img
+                src={appLogo}
+                alt="Research Pick Logo"
+                style={{
+                    height: 50,
+                    padding: "5px 5px"
+                }}
+            />
+            <div style={{
+                display: 'flex',
+                gap: 10,
+                paddingRight: "10px"
+            }}>
+                <HorizontalDivider />
+                <img
+                    onClick={() => navigate("/")}
+                    src={home} alt="home" style={{
+                        filter: "brightness(0) saturate(100%) invert(100%)", /* White */
+                    }} />
+                <HorizontalDivider />
+            </div>
+            <div style={{
+                display: 'flex',
+                borderRadius: '30px',
+                backgroundColor: 'white',
+                padding: '3px 5px 3px 0px',
+            }}>
+                {['Visual Editor', 'Review', 'Portal Question'].map((label, index) => (
+                    <button key={label} className="top-button"
+                        style={{
+                            borderRadius: '30px',
+                            backgroundColor: mode === index ? '#41075c' : 'white',
+                            color: mode === index ? 'white' : '#41075c',
+                            fontWeight: 'bold'
+                        }}
+                        onClick={() => setMode(index)}
+                    >
+                        {label}
+                    </button>
+                ))}
+            </div>
+        </div>
+        <div className="right-section">
+            <HorizontalDivider />
+            <ButtonWithIcon icon={share} text="Share" />
+            <HorizontalDivider />
+            <ButtonWithIcon icon={submit} text="Submit" onClick={handleSubmit} />
+            <HorizontalDivider />
+            <div style={{ backgroundColor: isChat ? "#fec000" : "inherit", margin: "0px 10px", borderRadius: "10px", color: isChat ? "#41075c" : "inherit" }}>
+                <ButtonWithIcon icon={chat} text="Chat" onClick={() => setChat(!isChat)} isChat={isChat} />
+            </div>
+        </div>
+    </div>
+);
+
+const Toolbar = ({ pixelValue, setPixelValue, editorType, setEditorType }) => (
+    <div style={{
+        display: 'flex',
+        backgroundColor: "white",
+        border: "none",
+        margin: "0px 10px",
+        borderRadius: "25px",
+        padding: "0px 10px",
+        cursor: "pointer",
+        fontSize: "16px",
+        fontWeight: "bold",
+        color: "#41075c",
+        transition: "all 0.3s ease",
+        ":hover": {
+            backgroundColor: "#41075c",
+            color: "white",
+        },
+        boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.15)",
+    }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <img src={redo} alt="redo" />
+            <img src={undo} alt="undo" />
+            <select style={{ padding: '5px', borderRadius: '10px', border: '1px solid #ccc' }}>
+                <option value="100">100%</option>
+                <option value="120">120%</option>
+                <option value="140">140%</option>
+            </select>
+            <HorizontalDivider />
+            <select style={{ padding: '5px', borderRadius: '10px', border: '1px solid #ccc' }}>
+                <option value="1">Normal Text</option>
+                <option value="2">Section</option>
+                <option value="3">Subsection</option>
+                <option value="4">Sub-subsection</option>
+                <option value="5">Paragraph</option>
+            </select>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <button
+                    style={{
+                        padding: '5px 10px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        cursor: 'pointer',
+                        backgroundColor: 'white',
+                        ":hover": {
+                            backgroundColor: '#f0f0f0',
+                        }
+                    }}
+                    onClick={() => setPixelValue(prev => Math.max(prev - 1, 0))}
+                >
+                    -
+                </button>
+                <span>{pixelValue}</span>
+                <button
+                    style={{
+                        padding: '5px 10px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        cursor: 'pointer',
+                        backgroundColor: 'white',
+                        ":hover": {
+                            backgroundColor: '#f0f0f0',
+                        }
+                    }}
+                    onClick={() => setPixelValue(prev => prev + 1)}
+                >
+                    +
+                </button>
+            </div>
+            <HorizontalDivider />
+            {[
+                { icon: bold, type: "bold" },
+                { icon: italic, type: "italic" },
+                { icon: underline, type: "underline" },
+                { icon: calculator, type: "math" },
+                { icon: music, type: "music" },
+                { icon: link, type: "link" },
+                { icon: tag, type: "tag" },
+                { icon: image, type: "image" },
+                { icon: table, type: "table" },
+                { icon: align, type: "align" },
+                { icon: intentLeft, type: "internLeft" },
+                { icon: intentRight, type: "internRight" },
+                { icon: list, type: "list" },
+                { icon: numberList, type: "numberList" },
+            ].map(({ icon, type }) => (
+                <img key={type} src={icon} alt={type}
+                    style={{
+                        borderRadius: "5px",
+                        padding: "2px",
+                        backgroundColor: editorType === type ? "lightgray" : "transparent"
+                    }}
+                    onClick={() => setEditorType(type)}
+                />
+            ))}
+        </div>
+    </div>
+);
+
+const Sidebar = ({ pixelValue, setPixelValue, editorType, setEditorType }) => (
+    <div style={{
+        backgroundColor: "#f0f0f0",
+        padding: "18px 15px 3px 15px",
+        height: "calc(100vh - 62px)",
+        display: "flex",
+        justifyContent: "space-between",
+    }}>
+        <button style={{
+            backgroundColor: "white",
+            border: "none",
+            padding: "0px 10px",
+            borderRadius: "25px",
+            cursor: "pointer",
+            fontSize: "14px",
+            fontWeight: "bold",
+            color: "#41075c",
+            transition: "all 0.3s ease",
+            ":hover": {
+                backgroundColor: "#41075c",
+                color: "white",
+            },
+            boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.15)",
+            width: "280px"
+        }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <p>Document Sections</p>
+                <Add />
+            </div>
+        </button>
+        <Toolbar pixelValue={pixelValue} setPixelValue={setPixelValue} editorType={editorType} setEditorType={setEditorType} />
+        <div style={{
+            display: 'flex',
+            backgroundColor: "white",
+            border: "none",
+            padding: '3px 5px 3px 0px',
+            borderRadius: "25px",
+            cursor: "pointer",
+            fontSize: "14px",
+            fontWeight: "bold",
+            color: "#41075c",
+            transition: "all 0.3s ease",
+            ":hover": {
+                backgroundColor: "#41075c",
+                color: "white",
+            },
+            boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.15)",
+            width: "270px",
+            justifyContent: "space-between",
+        }}>
+            {['Comments', 'Modifications'].map((label, index) => (
+                <button key={label} className="top-button"
+                    style={{
+                        borderRadius: '30px',
+                        backgroundColor: index === 0 ? '#41075c' : 'white',
+                        color: index === 0 ? 'white' : '#41075c',
+                        fontWeight: 'bold',
+                        fontSize: "14px",
+                        padding: "0px 20px"
+                    }}
+                    onClick={() => { }}
+                >
+                    {label}
+                </button>
+            ))}
+        </div>
+    </div>
+);
+
+const ButtonWithIcon = ({ icon, text, onClick, isChat }) => (
+    <button className={isChat ? "top-button-active" : "top-button"} onClick={onClick}>
+        <img src={icon}
+            style={{
+                filter: isChat ? "" : "brightness(0) saturate(100%) invert(100%)",
+                height: '25px',
+            }}
+            alt={text.toLowerCase()}
+        /> {text}
+    </button>
+);
 
 function EditorPage() {
     const navigate = useNavigate();
     const [mode, setMode] = useState(0);
+    const [type, setType] = useState(0);
     const [isEdit, setIsEdit] = useState(true);
+    const [pixelValue, setPixelValue] = useState(12);
+    const [editorType, setEditorType] = useState("bold");
     const ref = useRef(null);
     const { id } = useParams();
+    const [isChat, setChat] = useState(false);
 
     const handleSubmit = async () => {
         if (ref.current) {
@@ -47,184 +325,177 @@ function EditorPage() {
             }
         };
         fetchData();
+        // const channel = window.Echo.private(`user.${id}`)
+        //     .listen('MessageEvent', (e) => {
+        //         // Handle the event, e.g., display a notification
+        //     });
+        // return () => {
+        //     channel.stopListening('MessageEvent');
+        // };
     }, [id, isEdit]);
+    const auth = { user: { id: 1 } }; // Replace with your actual auth object
+
+
+
+    useEffect(() => {
+        window.Pusher = Pusher;
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            key: "2ae2e982409c3e397b85", // Replace with your Pusher app key
+            cluster: "ap2", // Replace with your Pusher cluster
+            wsHost: "http://pocapi.researchpick.com/",
+            // wsPort: 6001,
+            forceTLS: false,
+            disableStats: true,
+        });
+        // Assuming you have the authenticated user's ID available:
+        const userId = 5;
+        window.Echo.channel(`user.${userId}`).listen('MessageEvent', (event) => {
+            console.log('MessageEvent Event:', event);
+            // setMessages((oldMessages) => [...oldMessages, event.message]);
+        });
+
+        return () => {
+            window.Echo.leaveChannel(`user.${userId}`);
+            console.log("Echo stopped listening");
+        };
+        // window.Echo.private(`user.${userId}`)
+        //     .listen('UserUpdated', (event) => {
+        //         console.log('User Updated Event:', event);
+        //         // Handle the received data
+        //     });
+        // if (auth.user && auth.user.id && window.Echo) {
+        //     const channel = window.Echo.private(`user.${auth.user.id}`)
+        //         .listen('MessageEvent', (e) => {
+        //             console.log('Received MessageEvent:', e);
+        //             // Handle the event, e.g., update state to display a notification
+        //         });
+
+        //     return () => {
+        //         channel.stopListening('MessageEvent');
+        //         console.log("channel stopped listening");
+        //     };
+        // }
+
+        // // Optional: Clean up even if Echo is not initialized or user is not logged in
+        // return () => {
+        //     if (window.Echo) {
+        //         window.Echo.leave(`user.${auth.user.id}`);
+        //         console.log("Echo stopped listening 1");
+        //     }
+        // };
+    }, []); // Depend on auth.user?.id to re-subscribe when user changes
+    const [message, setMessage] = useState('');
+
+    const handleInputChange = (event) => {
+        setMessage(event.target.value);
+    };
+
+    const handleSend = () => {
+        // Replace this with your actual logic to send the message
+        console.log('Sending message:', message);
+        setMessage(''); // Clear the input after sending
+    };
 
     return (
         <div className="research-pick-container">
-            <div style={{
-                backgroundImage: `url(${bgImage})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                height: 62,
-                display: 'flex',
-                justifyContent: 'space-between',
-                color: 'white',
-                fontSize: 32,
-                fontWeight: 'bold',
-                fontFamily: 'Poppins',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                borderBottom: '2px solid #fff',
-                top: 0,
-                left: 0,
-                width: '100%',
-                zIndex: 100,
-                boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
-            }}>
-                <div className="left-section">
-                    <img
-                        src={appLogo}
-                        alt="Research Pick Logo"
-                        style={{
-                            height: 50,
-                            padding: "5px 5px"
-                        }}
-                    />
-                    <div style={{
-                        display: 'flex',
-                        gap: 10,
-                        paddingRight: "10px"
-                    }}>
-                        <HorizontalDivider />
-                        <img
-                            onClick={() => navigate("/")}
-                            src={home} alt="home" style={{
-                                filter: "brightness(0) saturate(100%) invert(100%)", /* White */
-                            }} />
-                        <HorizontalDivider />
+            <Header mode={mode} setMode={setMode} navigate={navigate} handleSubmit={handleSubmit} isChat={isChat} setChat={setChat} />
+            {
+                isChat ? <div
+                    style={{
+                        backgroundColor: "#f0f0f0",
+                        padding: "10px",
+                        height: "calc(100vh - 62px)",
+                        display: "flex",
+                        justifyContent: "center",
+                    }}
+                >
+                    <div className="content-area">
+                        <div className="left-sidebar">
+                        </div>
+                        <div style={{
+                            flexGrow: "1",
+                            justifyContent: "space-around"
+                        }}>
+                            <div style={{
+                                backgroundColor: "white",
+                                border: "none",
+                                margin: "0px 10px",
+                                borderRadius: "25px",
+                                padding: "12px",
+                                cursor: "pointer",
+                                fontSize: "17px",
+                                fontWeight: "bold",
+                                color: "#41075c",
+                                transition: "all 0.3s ease",
+                                ":hover": {
+                                    backgroundColor: "#41075c",
+                                    color: "white",
+                                },
+                                boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.15)",
+                            }}>
+                                This is title of the editor
+                            </div>
+                            <div className="instructions">
+                                Invite collaborators,
+                                <br />
+                                Send your first message to your collaborators
+                            </div>
+                            <div className="collaboration-message-container">
+
+                                <div className="input-container">
+                                    <button className="icon-button">
+                                        <FaSmile />
+                                    </button>
+                                    <input
+                                        type="text"
+                                        placeholder="Send your message to your collaborators......."
+                                        value={message}
+                                        onChange={handleInputChange}
+                                        className="message-input"
+                                    />
+                                    <button className="icon-button">
+                                        <FaMicrophone />
+                                    </button>
+                                    <button className="icon-button">
+                                        <AttachFile />
+                                    </button>
+                                    <button onClick={handleSend} className="send-button">
+                                        Send  <FaPaperPlane />
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
-                    <div style={{
-                        display: 'flex',
-                        borderRadius: '30px',
-                        backgroundColor: 'white',
-                        padding: '3px 5px 3px 0px',
-                    }}>
-                        <button className="top-button"
+                </div> :
+                    <>
+                        <Sidebar pixelValue={pixelValue} setPixelValue={setPixelValue} editorType={editorType} setEditorType={setEditorType} />
+                        <div
                             style={{
-                                borderRadius: '30px',
-                                backgroundColor: mode === 0 ? '#41075c' : 'white',
-                                color: mode === 0 ? 'white' : '#41075c',
-                                fontWeight: 'bold'
+                                backgroundColor: "#f0f0f0",
+                                padding: "10px",
+                                height: "calc(100vh - 62px)",
+                                display: "flex",
+                                justifyContent: "center",
                             }}
-                            onClick={() => setMode(0)}
                         >
-                            Visual Editor
-                        </button>
-                        <button className="top-button"
-                            style={{
-                                borderRadius: '30px',
-                                backgroundColor: mode === 1 ? '#41075c' : 'white',
-                                color: mode === 1 ? 'white' : '#41075c',
-                                fontWeight: 'bold',
-                            }}
-                            onClick={() => setMode(1)}
-
-                        >
-                            Review
-                        </button>
-                        <button className="top-button"
-                            style={{
-                                borderRadius: '30px',
-                                backgroundColor: mode === 2 ? '#41075c' : 'white',
-                                color: mode === 2 ? 'white' : '#41075c',
-                                fontWeight: 'bold',
-                            }}
-                            onClick={() => setMode(2)}
-                        >
-                            Portal Question
-                        </button>
-                    </div>
-                </div>
-                <div className="right-section">
-                    <HorizontalDivider />
-                    <button className="top-button"><img src={share}
-                        style={{
-                            filter: "brightness(0) saturate(100%) invert(100%)",
-                            height: '25px',
-                        }}
-                        alt="share" /> Share</button>
-                    <HorizontalDivider />
-
-                    <button
-                        onClick={handleSubmit}
-                        className="top-button"><img src={submit}
-                            style={{
-                                filter: "brightness(0) saturate(100%) invert(100%)",
-                                height: '25px',
-                            }}
-                            alt="submit" /> Submit</button>
-                    <HorizontalDivider />
-
-                    <button className="top-button"><img src={chat}
-                        style={{
-                            filter: "brightness(0) saturate(100%) invert(100%)",
-                            height: '25px',
-                        }}
-                        alt="chat" /> Chat</button>
-                </div>
-            </div>
-            <div
-                style={{
-                    backgroundColor: "#f0f0f0",
-                    padding: "20px",
-                    height: "calc(100vh - 62px)",
-                    display: "flex",
-                    justifyContent: "center",
-                }}
-            >
-                <div className="content-area">
-                    <div className="left-sidebar">
-                    </div>
-                    <div className="main-content">
-                        <Home ref={ref} />
-                    </div>
-                    <div className="right-sidebar">
-                    </div>
-                </div>
-            </div>
-            {/* <div className="content-area">
-                <div className="left-sidebar">
-                    <div className="document-sections">
-                        <button className="add-section-button">+</button>
-                        <span>Document sections</span>
-                    </div>
-                    <div className="section-item">
-                        Types of stem cell
-                    </div>
-                </div>
-
-                <div className="main-content">
-                    <div className="top-controls">
-                        <select className="dropdown">
-                            <option>DC 100 %</option>
-                        </select>
-                        <select className="dropdown">
-                            <option>Normal text</option>
-                        </select>
-                        <select className="dropdown">
-                            <option>12+</option>
-                        </select>
-                        <button className="format-button">B</button>
-                        <button className="format-button">I</button>
-                        <button className="format-button">U</button>
-                    </div>
-                    <div className="editor-area">
-                        <h1>Types of stem cell</h1>
-                    </div>
-                </div>
-
-                <div className="right-sidebar">
-                    <button className="sidebar-button">Comments</button>
-                    <button className="sidebar-button">Modification</button>
-                    <div className="no-comments">
-                        No comments
-                    </div>
-                </div>
-            </div> */}
+                            <div className="content-area">
+                                <div className="left-sidebar">
+                                </div>
+                                <div className="main-content">
+                                    <Home ref={ref} />
+                                </div>
+                                <div className="right-sidebar">
+                                    no comments
+                                </div>
+                            </div>
+                        </div>
+                    </>
+            }
         </div>
     );
 }
 
 export default EditorPage;
-
 
