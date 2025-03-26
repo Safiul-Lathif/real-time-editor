@@ -30,6 +30,7 @@ import redo from "../../assets/editorOptions/back_line.png";
 import { FaMicrophone, FaPaperPlane, FaSmile } from 'react-icons/fa'; // Import icons
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
+import AuthorCard from '../../components/autherCard';
 
 const Header = ({ mode, setMode, navigate, handleSubmit, isChat, setChat }) => (
     <div style={{
@@ -316,23 +317,23 @@ function EditorPage() {
         }
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (id === "new") {
-                setIsEdit(false);
-            } else {
-                setIsEdit(true);
-            }
-        };
-        fetchData();
-        // const channel = window.Echo.private(`user.${id}`)
-        //     .listen('MessageEvent', (e) => {
-        //         // Handle the event, e.g., display a notification
-        //     });
-        // return () => {
-        //     channel.stopListening('MessageEvent');
-        // };
-    }, [id, isEdit]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         if (id === "new") {
+    //             setIsEdit(false);
+    //         } else {
+    //             setIsEdit(true);
+    //         }
+    //     };
+    //     fetchData();
+    //     // const channel = window.Echo.private(`user.${id}`)
+    //     //     .listen('MessageEvent', (e) => {
+    //     //         // Handle the event, e.g., display a notification
+    //     //     });
+    //     // return () => {
+    //     //     channel.stopListening('MessageEvent');
+    //     // };
+    // }, [id, isEdit]);
     const auth = { user: { id: 1 } }; // Replace with your actual auth object
 
 
@@ -343,22 +344,21 @@ function EditorPage() {
             broadcaster: 'pusher',
             key: "2ae2e982409c3e397b85", // Replace with your Pusher app key
             cluster: "ap2", // Replace with your Pusher cluster
-            wsHost: "http://pocapi.researchpick.com/",
+            wsHost: "http://poc.researchpick.com/",
             // wsPort: 6001,
             forceTLS: false,
             disableStats: true,
         });
         // Assuming you have the authenticated user's ID available:
-        const userId = 5;
+        const userId = 3;
+        console.log("userId:", userId);
         window.Echo.channel(`user.${userId}`).listen('MessageEvent', (event) => {
             console.log('MessageEvent Event:', event);
             // setMessages((oldMessages) => [...oldMessages, event.message]);
         });
+        console.log("userId  hs:", userId);
 
-        return () => {
-            window.Echo.leaveChannel(`user.${userId}`);
-            console.log("Echo stopped listening");
-        };
+
         // window.Echo.private(`user.${userId}`)
         //     .listen('UserUpdated', (event) => {
         //         console.log('User Updated Event:', event);
@@ -384,17 +384,78 @@ function EditorPage() {
         //         console.log("Echo stopped listening 1");
         //     }
         // };
+        return () => {
+            window.Echo.leaveChannel(`user.${userId}`);
+            console.log("Echo stopped listening");
+        };
     }, []); // Depend on auth.user?.id to re-subscribe when user changes
-    const [message, setMessage] = useState('');
+    const [message, setMessages] = useState();
+    const [messages, setMessage] = useState([
+        {
+            senderName: `Safiul Lathif`,
+            content: "Hey team, how's the research paper coming along?",
+            time: "10:30 AM",
+            mySelf: true
+        },
+        {
+            senderName: `Prakash Kumar`,
+            content: "It's going well, Safiul. I think we need more references for the introduction section.",
+            time: "10:35 AM",
+            mySelf: false
+        },
+        {
+            senderName: `Rasith Mohammed`,
+            content: "I agree with Prakash. Also, we should finalize the methodology by tomorrow.",
+            time: "10:40 AM",
+            mySelf: false
+        },
+        {
+            senderName: `Alice Johnson`,
+            content: "The initial findings suggest that the hypothesis holds true. However, we need to conduct further experiments to validate the results comprehensively. The data collected so far is promising, but it's crucial to ensure the reliability and accuracy through additional testing and peer review. Let's discuss how we can allocate resources for the next phase of the research, and identify any potential challenges that might arise during the process. Also, consider collaborating with external experts to gain additional insights and perspectives.",
+            time: "11:00 AM",
+            mySelf: false
+        },
+        {
+            senderName: `Bob Smith`,
+            content: "Thank you, Alice, for the detailed update. I believe involving external experts is an excellent idea. We should also start drafting a preliminary report to summarize our findings and outline the next steps. This will help us stay organized and provide a clear direction for the upcoming phases. Additionally, let's schedule a meeting next week to discuss the allocation of resources and address any concerns that team members might have. Looking forward to everyone's feedback and suggestions.",
+            time: "11:15 AM",
+            mySelf: true
+        },
+        {
+            senderName: `Safiul Lathif`,
+            content: "I also agree with Prakash. We should also consider including a section on the limitations of our research and potential avenues for future studies.",
+            time: "11:20 AM",
+            mySelf: true
+        },
+        {
+            senderName: `Rasith Mohammed`,
+            content: "I'll take care of the literature review and methodology sections. Safiul, can you please work on the introduction and conclusion?",
+            time: "11:25 AM",
+            mySelf: false
+        },
+        {
+            senderName: `Alice Johnson`,
+            content: "I'll start working on the results section. Also, I'll make sure to include any relevant tables and figures to support our findings.",
+            time: "11:30 AM",
+            mySelf: false
+        },
+        {
+            senderName: `Bob Smith`,
+            content: "Great, I'll start working on the preliminary report. I'll also make sure to include any relevant appendices and references.",
+            time: "11:35 AM",
+            mySelf: true
+        }
+
+
+    ]);
 
     const handleInputChange = (event) => {
-        setMessage(event.target.value);
+        setMessages(event.target.value);
     };
 
     const handleSend = () => {
-        // Replace this with your actual logic to send the message
-        console.log('Sending message:', message);
-        setMessage(''); // Clear the input after sending
+        setMessage([...messages, { senderName: "Safiul Lathif", content: message, time: new Date().toLocaleTimeString(), mySelf: true }]);
+        setMessages("");
     };
 
     return (
@@ -411,11 +472,39 @@ function EditorPage() {
                     }}
                 >
                     <div className="content-area">
-                        <div className="left-sidebar">
+                        <div style={{
+                            width: "340px", backgroundColor: "white", padding: "20px", borderRadius: "15px",
+                            height: "calc(100vh - 70px)",
+                            overflow: "scroll"
+                        }}>
+                            <div style={{
+                                backgroundColor: "#ededed",
+                                border: "none",
+                                margin: "0px 0px",
+                                borderRadius: "25px",
+                                padding: "12px 0px",
+                                cursor: "pointer",
+                                fontSize: "17px",
+                                fontWeight: "600",
+                                color: "gray",
+                                transition: "all 0.3s ease",
+                                ":hover": {
+                                    backgroundColor: "#41075c",
+                                    color: "white",
+                                }
+                            }}>
+                                Collaborators
+                            </div>
+                            <AuthorCard authorTitle="Main Author" authorName="Dr. Rasith Mohamed" affiliationText="Department Of Diagnostic Imaging, Warren Alpert Medical School, Brown University, USA" />
+                            <AuthorCard authorTitle="Collaborator" authorName="Dr. Prakash Jaganathan" affiliationText="Department Of Diagnostic Imaging, Warren Alpert Medical School, Brown University, USA" />
+                            <AuthorCard authorTitle="Collaborator" authorName="Dr. Safiul Lathif" affiliationText="Department Of Diagnostic Imaging, Warren Alpert Medical School, Brown University, USA" />
                         </div>
                         <div style={{
                             flexGrow: "1",
-                            justifyContent: "space-around"
+                            width: "300px",
+                            justifyContent: "space-between",
+                            display: "flex",
+                            flexFlow: "column",
                         }}>
                             <div style={{
                                 backgroundColor: "white",
@@ -436,13 +525,77 @@ function EditorPage() {
                             }}>
                                 This is title of the editor
                             </div>
-                            <div className="instructions">
+                            <div style={{
+                                overflowY: "scroll",
+                                height: "640px",
+                                padding: "10px",
+                            }}>
+                                {messages.map((message, index) => {
+                                    return (
+                                        <div style={{
+                                            justifyContent: message.mySelf ? "flex-end" : "flex-start",
+                                            display: "flex",
+                                        }}>
+                                            {
+                                                !message.mySelf ?
+                                                    <div>
+                                                        <img src="https://media.licdn.com/dms/image/v2/C4D03AQFdX9FHzdCSYg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1646324063549?e=1748476800&v=beta&t=obCqWLLZopjY3VmaiNz5pGVCQwNMgP-gPfqtbTXBua8" alt="profile" style={{ width: "40px", borderRadius: "50%", marginRight: "10px" }} />
+                                                    </div> : <>
+                                                    </>
+                                            }
+                                            <div style={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                alignItems: message.mySelf ? "flex-end" : "flex-start",
+                                                gap: "5px"
+                                            }}>
+                                                <div >
+                                                    {
+                                                        message.mySelf ?
+                                                            <span style={{ fontSize: "12px", color: "#a6a6a6", marginRight: "10px" }}>{message.time}</span>
+                                                            : <></>
+                                                    }
+                                                    <span style={{ fontWeight: "bold", fontSize: "15px", color: "#A9a9a9" }}>{message.senderName}</span>
+                                                    {
+                                                        !message.mySelf ?
+                                                            <span style={{ fontSize: "12px", color: "#a6a6a6", marginLeft: "10px" }}>{message.time}</span>
+                                                            : <></>
+                                                    }
+                                                </div>
+                                                <div key={index} style={{
+                                                    display: "flex",
+                                                    flexDirection: message.mySelf ? "row-reverse" : "row",
+                                                    gap: "10px",
+                                                    padding: "10px",
+                                                    borderRadius: message.mySelf ? "15px 0px 15px 15px" : "0px 15px 15px 15px",
+                                                    marginBottom: "10px",
+                                                    backgroundColor: message.mySelf ? "#2fa1ec" : "white",
+                                                    color: !message.mySelf ? "black" : "white",
+                                                    boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.1)",
+                                                    textAlign: "start",
+                                                    maxWidth: "60%",
+                                                }}>
+                                                    <div className="message-content">{message.content}</div>
+                                                </div>
+                                            </div>
+
+                                            {
+                                                message.mySelf ?
+                                                    <div>
+                                                        <img src="https://media.licdn.com/dms/image/v2/C4D03AQFdX9FHzdCSYg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1646324063549?e=1748476800&v=beta&t=obCqWLLZopjY3VmaiNz5pGVCQwNMgP-gPfqtbTXBua8" alt="profile" style={{ width: "40px", borderRadius: "50%", marginLeft: "10px" }} />
+                                                    </div> : <>
+                                                    </>
+                                            }
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                            {/* <div className="instructions">
                                 Invite collaborators,
                                 <br />
                                 Send your first message to your collaborators
-                            </div>
+                            </div> */}
                             <div className="collaboration-message-container">
-
                                 <div className="input-container">
                                     <button className="icon-button">
                                         <FaSmile />
@@ -450,8 +603,8 @@ function EditorPage() {
                                     <input
                                         type="text"
                                         placeholder="Send your message to your collaborators......."
-                                        value={message}
                                         onChange={handleInputChange}
+                                        value={message}
                                         className="message-input"
                                     />
                                     <button className="icon-button">
@@ -493,7 +646,7 @@ function EditorPage() {
                         </div>
                     </>
             }
-        </div>
+        </div >
     );
 }
 
