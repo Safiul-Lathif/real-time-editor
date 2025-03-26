@@ -48,10 +48,6 @@ const NewPassword = () => {
       <div className={styles.form}>
         <img src={appLogo} alt="Research Pick Logo" className={styles.logo} />
         <h1 className={styles.welcome}>Set a new password</h1>
-        <p>
-          Create a new password. Ensure it differs from pervious ones for
-          security
-        </p>
         <form className={styles.forms} onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <label htmlFor="email">Password</label>
@@ -66,7 +62,7 @@ const NewPassword = () => {
             </div>
           </div>
           <div className={styles.formGroup}>
-            <label htmlFor="email">Conform Password</label>
+            <label htmlFor="email">Confirm Password</label>
             <div className={styles.wrapper}>
               <div className={styles.icon}>{<LockOpen />}</div>
               <input
