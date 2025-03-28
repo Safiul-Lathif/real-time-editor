@@ -317,23 +317,16 @@ function EditorPage() {
         }
     };
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         if (id === "new") {
-    //             setIsEdit(false);
-    //         } else {
-    //             setIsEdit(true);
-    //         }
-    //     };
-    //     fetchData();
-    //     // const channel = window.Echo.private(`user.${id}`)
-    //     //     .listen('MessageEvent', (e) => {
-    //     //         // Handle the event, e.g., display a notification
-    //     //     });
-    //     // return () => {
-    //     //     channel.stopListening('MessageEvent');
-    //     // };
-    // }, [id, isEdit]);
+    useEffect(() => {
+        const fetchData = async () => {
+            if (id === "new") {
+                setIsEdit(false);
+            } else {
+                setIsEdit(true);
+            }
+        };
+        fetchData();
+    }, [id, isEdit]);
     const auth = { user: { id: 1 } }; // Replace with your actual auth object
 
 
